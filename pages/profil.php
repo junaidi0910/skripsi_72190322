@@ -31,15 +31,15 @@
 				</tr>
 
 				<tr>
-					<th>Nama Guru</th>
+					<th>Nama PA/PPA</th>
 					<td>:</td>
-					<td id="td_nama_guru"><?= $row['nama_guru']; ?></td>
+					<td id="td_nama_ppa"><?= $row['nama_ppa']; ?></td>
 				</tr>
 
 				<tr>
-					<th>Status Guru</th>
+					<th>Status PA/PPA</th>
 					<td>:</td>
-					<td id="td_status_guru"><?= $row['status_guru']; ?></td>
+					<td id="td_status_ppa"><?= $row['status_ppa']; ?></td>
 				</tr>
 
 				<tr>
@@ -95,8 +95,8 @@
 			  		$("#td_nip").html(res.nip);
 			  		$("#td_jabatan").html(res.jabatan);
 			  		$("#td_password").html(res.password);
-			  		$("#td_nama_guru").html(res.nama_guru);
-			  		$("#td_status_guru").html(res.status_guru);
+			  		$("#td_nama_ppa").html(res.nama_ppa);
+			  		$("#td_status_ppa").html(res.status_ppa);
 			  		$("#td_alamat").html(res.alamat);
 			  		$("#td_ttl").html(res.tempat_lahir+", "+res.tgl_lahir);
 			  		$("#td_jk").html(res.jenis_kelamin=="L"?"Laki-laki":"Perempuan");

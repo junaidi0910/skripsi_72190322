@@ -41,7 +41,7 @@ $root .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME'
 
         $sql = "SELECT
                     d.nip,
-                    d.nama_guru,
+                    d.nama_ppa,
                     SUM(a.hasil_nilai) as nilai,
                     COUNT(a.id_nilai) as jml
                 FROM penilaian a

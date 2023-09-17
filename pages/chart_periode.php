@@ -17,7 +17,7 @@ while($p_row = mysql_fetch_array($p_q)){
         $u_sql = "SELECT * FROM user a JOIN jenis_user b ON a.id_jenis_user = b.id_jenis_user WHERE b.level = 1 AND a.nip = '$nip'";
     }else{
         $u_sql = "SELECT * FROM user a JOIN jenis_user b ON a.id_jenis_user = b.id_jenis_user WHERE b.level = 1";
-        $ret["name"] = "Semua Guru";
+        $ret["name"] = "Semua PA/PPA";
     }
     $u_q = mysql_query($u_sql);
     $j=0;
@@ -25,11 +25,11 @@ while($p_row = mysql_fetch_array($p_q)){
 
     while($u_row = mysql_fetch_array($u_q)){
         if(isset($_GET['nip'])){
-            $ret["name"] = $u_row['nama_guru'];
+            $ret["name"] = $u_row['nama_ppa'];
         }
         $sql = "SELECT
                     d.nip,
-                    d.nama_guru,
+                    d.nama_ppa,
                     SUM(a.hasil_nilai) as nilai,
                     COUNT(a.id_nilai) as jml
                 FROM penilaian a
@@ -81,7 +81,7 @@ echo json_encode($as);
 
             $sql = "SELECT
                         d.nip,
-                        d.nama_guru,
+                        d.nama_ppa,
                         IFNULL(SUM(a.hasil_nilai), 0) as nilai,
                         COUNT(a.id_nilai) as jml
                     FROM penilaian a
@@ -92,11 +92,11 @@ echo json_encode($as);
             $q = mysql_query($sql);
             $row = mysql_fetch_array($q);
             if($j==0){
-                $dd .= "{nama:'$row[nama_guru]',tahun_ajar:'$p_row[tahun_ajar] $p_row[semester]', nilai:$row[nilai]}";
+                $dd .= "{nama:'$row[nama_ppa]',tahun_ajar:'$p_row[tahun_ajar] $p_row[semester]', nilai:$row[nilai]}";
             }else{
-                $dd .= ", {nama:'$row[nama_guru]',tahun_ajar:'$p_row[tahun_ajar] $p_row[semester]', nilai:$row[nilai]}";
+                $dd .= ", {nama:'$row[nama_ppa]',tahun_ajar:'$p_row[tahun_ajar] $p_row[semester]', nilai:$row[nilai]}";
             }
-            $daa[$row['nama_guru']][$i] = array('tahun_ajar'=> $p_row['tahun_ajar'].' '.$p_row['semester'], 'nilai'=>$row['nilai']); 
+            $daa[$row['nama_ppa']][$i] = array('tahun_ajar'=> $p_row['tahun_ajar'].' '.$p_row['semester'], 'nilai'=>$row['nilai']); 
             $j++;
             $dd .= ",";
 

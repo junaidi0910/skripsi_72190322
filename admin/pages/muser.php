@@ -94,16 +94,16 @@
 						$nip = $row['nip'];
 						$jabatan =  $row['jabatan'];
 						$$jabatan = $row['jabatan']; 
-						$password = $row['password']; 
-						$nama_guru = $row['nama_guru']; 
-						$status_guru = $row['status_guru']; 
+						$password = dekripsiPassword($row['password']); 
+						$nama_ppa = $row['nama_ppa']; 
+						$status_ppa = $row['status_ppa']; 
 						$alamat = $row['alamat']; 
 						$tempat_lahir = $row['tempat_lahir']; 
 						$tgl_lahir = $row['tgl_lahir']; 
 						$jenis_kelamin = $row['jenis_kelamin']; 
-						$$row['jenis_kelamin'] = $row['jenis_kelamin']; 
+						// $$row['jenis_kelamin'] = $row['jenis_kelamin']; 
 						$status_nikah = $row['status_nikah']; 
-						$$row['status_nikah'] = $row['status_nikah']; 
+						// $$row['status_nikah'] = $row['status_nikah']; 
 						$no_telp = $row['no_telp']; 
 						$btn = "Ubah"; 
 					}
@@ -141,9 +141,9 @@
 							    </div>
 						  	</div>
 				       	 	<div class="form-group row">
-						   		<label for="nama_guru" class="col-sm-2 col-form-label col-form-label-sm">Nama</label>
+						   		<label for="nama_ppa" class="col-sm-2 col-form-label col-form-label-sm">Nama</label>
 							    <div class="col-sm-10">
-							      	<input type="text" class="form-control form-control-sm" id="nama_guru" name="nama_guru" value="<?= isset($nama_guru)?$nama_guru:""; ?>" placeholder="Nama">
+							      	<input type="text" class="form-control form-control-sm" id="nama_ppa" name="nama_ppa" value="<?= isset($nama_ppa)?$nama_ppa:""; ?>" placeholder="Nama">
 							    </div>
 						  	</div>
 						  	<div class="form-group row">
@@ -160,15 +160,15 @@
 						          			$jb = mysql_query("SELECT * FROM jenis_user");
 						          			while($rj = mysql_fetch_array($jb)){
 						          		?>
-								      	<option value="<?= $rj['id_jenis_user']?>" <?= isset($$rj['jabatan'])?"selected":''?> ><?= $rj['jabatan']; ?></option>
+								      	<option value="<?= $rj['id_jenis_user']?>" <?= isset($rj['jabatan'])? 'selected':''?> ><?= $rj['jabatan']; ?></option>
 								   		<?php } ?>
 								   	</select>
 						    	</div>
 						  	</div>
 						  	<div class="form-group row">
-								<label for="status_guru" class="col-sm-2 control-form-label col-form-label-sm">Status Guru</label>
+								<label for="status_ppa" class="col-sm-2 control-form-label col-form-label-sm">Status Guru</label>
 								<div class="col-sm-10">
-									<input type="text" class="form-control form-control-sm" id="status_guru" name="status_guru" value="<?= isset($status_guru)?$status_guru:""; ?>" placeholder="Status Guru">
+									<input type="text" class="form-control form-control-sm" id="status_ppa" name="status_ppa" value="<?= isset($status_ppa)?$status_ppa:""; ?>" placeholder="Status Guru">
 								</div>
 							</div>
 
@@ -196,18 +196,18 @@
 							<div class="form-group row">
 								<label for="jenis_kelamin" class="col-sm-2 control-form-label col-form-label-sm">Jenis Kelamin</label>
 								<div class="col-sm-10">
-									<input type="radio" id="jenis_kelamin_l" name="jenis_kelamin" value="L" <?= isset($L)?"checked":""; ?> > Laki-laki
+									<input type="radio" id="jenis_kelamin_l" name="jenis_kelamin" value="L" <?= isset($jenis_kelamin) && $jenis_kelamin == "L"?"checked":""; ?> > Laki-laki
 									&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="radio" id="jenis_kelamin_p" name="jenis_kelamin" value="P" <?= isset($P)?"checked":""; ?> > Perempuan
+									<input type="radio" id="jenis_kelamin_p" name="jenis_kelamin" value="P" <?= isset($jenis_kelamin) && $jenis_kelamin == "P"?"checked":""; ?> > Perempuan
 								</div>
 							</div>
 
 							<div class="form-group row">
 								<label for="status_nikah" class="col-sm-2 control-form-label col-form-label-sm">Status Nikah</label>
 								<div class="col-sm-10">
-									<input type="radio" id="status_nikah_b" name="status_nikah" value="B" <?= isset($B)?"checked":""; ?> > Belum Nikah
+									<input type="radio" id="status_nikah_b" name="status_nikah" value="B" <?= isset($status_nikah) && $status_nikah == "B"?"checked":""; ?> > Belum Nikah
 									&nbsp;&nbsp;&nbsp;&nbsp;
-									<input type="radio" id="status_nikah_n" name="status_nikah" value="N" <?= isset($N)?"checked":""; ?> > Sudah Nikah
+									<input type="radio" id="status_nikah_n" name="status_nikah" value="N" <?= isset($status_nikah) && $status_nikah == "N"?"checked":""; ?> > Sudah Nikah
 								</div>
 							</div>
 
@@ -237,10 +237,11 @@
 				<table class="order-table">
 					<thead>
 						<tr>
-							<th width="25%">NIP</th>
-							<th width="25%">Nama</th>
-							<th width="25%">Jabatan</th>
-							<th width="25%">Aksi</th>
+							<th width="10%">No</th>
+							<th width="20%">NIP</th>
+							<th width="30%">Nama</th>
+							<th width="20%">Jabatan</th>
+							<th width="20%">Aksi</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -251,8 +252,9 @@
 							while($row = mysql_fetch_array($q)){
 						?>
 						<tr>
+							<td><?= ++$i; ?></td>
 							<td><?= $row['nip']; ?></td>
-							<td><?= $row['nama_guru']; ?></td>
+							<td><?= $row['nama_ppa']; ?></td>
 							<td><?= $row['jabatan']; ?></td>
 							<td>
 								<button class="btn btn-outline-info btn-sm btn_info" id="<?= $row['nip'];?>"><span data-feather="info"></span></button>
@@ -301,13 +303,13 @@
 					<tr>
 						<th>Nama Guru</th>
 						<td>:</td>
-						<td id="td_nama_guru">:</td>
+						<td id="td_nama_ppa">:</td>
 					</tr>
 
 					<tr>
 						<th>Status Guru</th>
 						<td>:</td>
-						<td id="td_status_guru">:</td>
+						<td id="td_status_ppa">:</td>
 					</tr>
 
 					<tr>
@@ -379,8 +381,8 @@
 			  		$("#td_nip").html(res.nip);
 			  		$("#td_jabatan").html(res.jabatan);
 			  		$("#td_password").html(res.password);
-			  		$("#td_nama_guru").html(res.nama_guru);
-			  		$("#td_status_guru").html(res.status_guru);
+			  		$("#td_nama_ppa").html(res.nama_ppa);
+			  		$("#td_status_ppa").html(res.status_ppa);
 			  		$("#td_alamat").html(res.alamat);
 			  		$("#td_ttl").html(res.tempat_lahir+", "+res.tgl_lahir);
 			  		$("#td_jk").html(res.jenis_kelamin=="L"?"Laki-laki":"Perempuan");

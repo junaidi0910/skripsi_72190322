@@ -1,7 +1,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col">
-			<h1>Laporan Penilaian Kinerja Guru</h1>
+			<h1>Laporan Penilaian Kinerja PA&PPA</h1>
 			<h3>Periode <?= get_tahun_ajar(); ?></h3>
 			<hr/>
 		</div>
@@ -29,7 +29,7 @@
 						$i=0;
 						$sql = "SELECT
 									d.nip,
-									d.nama_guru,
+									d.nama_ppa,
 									SUM(a.hasil_nilai) as nilai,
 									COUNT(a.id_nilai) as jml
 								FROM penilaian a
@@ -56,7 +56,7 @@
 					<tr>
 						<td><?= ++$i; ?></td>
 						<td><?= $row['nip']; ?></td>
-						<td><?= $row['nama_guru']; ?></td>
+						<td><?= $row['nama_ppa']; ?></td>
 						<td><?= get_tot_nilai($row['nip'], get_tahun_ajar_id()); ?>
 						</td>
 						<td>
@@ -88,7 +88,7 @@
                 <tr>
                     <td><strong>Nama</strong></td>
                     <td>:</td>
-                    <td> <?= $row['nama_guru']; ?></td>
+                    <td> <?= $row['nama_ppa']; ?></td>
                 </tr>
                 <tr>
                     <td><strong>Jabatan</strong></td>
@@ -193,9 +193,9 @@
 							(SELECT 
 								a.id_nilai, 
 								h.nip as nip_dinilai,
-								h.nama_guru as 'dinilai',
+								h.nama_ppa as 'dinilai',
 								e.nip as nip_penilai, 
-								e.nama_guru as 'penilai',
+								e.nama_ppa as 'penilai',
 								f.jabatan,
 								f.level,
 								c.id_kompetensi,

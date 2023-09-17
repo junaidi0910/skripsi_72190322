@@ -79,7 +79,7 @@ tr.bold > td{
         if(!isset($_GET['id'])){
     ?>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <h2>Data guru yang dinilai</h2> <a class="float-right" title="Rubrik Penilaian" href="assets/file/rubrik.pdf"><i class="fa fa-file-pdf-o fa-2x"></i></a>
+            <h2>Data PA/PPA yang dinilai</h2> <a class="float-right" title="Rubrik Penilaian" href="assets/file/rubrik.pdf"><i class="fa fa-file-pdf-o fa-2x"></i></a>
             <br>
             <table class="table">
                 <thead>
@@ -94,7 +94,7 @@ tr.bold > td{
                     <?php
                         $i=0;
                         $nip_s = $_SESSION[md5('user')];
-                        $sql = "SELECT a.id_penilai, a.nip, c.nama_guru, b.id_penilai_detail FROM penilai a JOIN penilai_detail b  ON a.id_penilai = b.id_penilai
+                        $sql = "SELECT a.id_penilai, a.nip, c.nama_ppa, b.id_penilai_detail FROM penilai a JOIN penilai_detail b  ON a.id_penilai = b.id_penilai
                                 JOIN user c ON a.nip = c.nip WHERE b.nip = '$nip_s' ";
                                 /*AND b.id_penilai_detail NOT IN(SELECT id_penilai_detail FROM penilaian)*/
                         //echo $sql;
@@ -105,11 +105,20 @@ tr.bold > td{
                     <tr class="<?= sudah($row['id_penilai_detail']); ?>">
                         <td><?= ++$i; ?></td>
                         <td><?= $row['nip']; ?></td>
-                        <td><?= $row['nama_guru']; ?></td>
+                        <td><?= $row['nama_ppa']; ?></td>
                         <td>
-                            <a href="index.php?p=melakukanpen&id=<?= $row['id_penilai']; ?>" class="btn btn-success btn-sm" >
+                            <?php
+                            $sql2 = "SELECT * FROM penilai a JOIN penilai_detail b ON a.id_penilai = b.id_penilai JOIN penilaian c ON b.id_penilai_detail = c.id_penilai_detail WHERE b.id_penilai_detail = ".$row['id_penilai_detail'];
+                            $q2 = mysql_query($sql2);
+                            if(mysql_num_rows($q2)==0){ ?>
+                            <a href="index.php?p=melakukanpen&id=<?= $row['id_penilai']; ?>" class="btn btn-success btn-sm">
                                 <span class="fa fa-pencil fa-2x"></span> 
                             </a>
+                            <?php } else { ?>
+                            <button class="btn btn-secondary btn-sm" disabled>
+                                <span class="fa fa-pencil fa-2x"></span> 
+                            </button> 
+                            <?php } ?>
                         </td>
                     </tr>
                     <?php } ?>
@@ -125,7 +134,7 @@ tr.bold > td{
             $sebagai = $rw['level']==3?'0':($rw['level']==1?'1':($nip_s==$rw['nip']?'2':''));
 
             $id_penilai = isset($_GET['id'])?mysql_real_escape_string(htmlspecialchars($_GET['id'])):"";
-            $sql = "SELECT a.id_penilai, a.nip, b.nama_guru, c.jabatan FROM penilai a JOIN user b ON a.nip = b.nip JOIN jenis_user c ON b.id_jenis_user = c.id_jenis_user WHERE a.id_penilai = '$id_penilai'";
+            $sql = "SELECT a.id_penilai, a.nip, b.nama_ppa, c.jabatan FROM penilai a JOIN user b ON a.nip = b.nip JOIN jenis_user c ON b.id_jenis_user = c.id_jenis_user WHERE a.id_penilai = '$id_penilai'";
             $q = mysql_query($sql);
             $row  = mysql_fetch_array($q);
         ?>
@@ -141,7 +150,7 @@ tr.bold > td{
                 <tr>
                     <td><strong>Nama</strong></td>
                     <td>:</td>
-                    <td> <?= $row['nama_guru']; ?></td>
+                    <td> <?= $row['nama_ppa']; ?></td>
                 </tr>
                 <tr>
                     <td><strong>Jabatan</strong></td>

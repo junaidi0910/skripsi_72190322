@@ -5,9 +5,9 @@
 		
 		$nip = isset($_POST['nip'])?mysql_real_escape_string(htmlspecialchars($_POST['nip'])):"";
 		$id_jenis_user = isset($_POST['id_jenis_user'])?mysql_real_escape_string(htmlspecialchars($_POST['id_jenis_user'])):"";
-		$password = isset($_POST['password'])?mysql_real_escape_string(htmlspecialchars($_POST['password'])):"";
-		$nama_guru = isset($_POST['nama_guru'])?mysql_real_escape_string(htmlspecialchars($_POST['nama_guru'])):"";
-		$status_guru = isset($_POST['status_guru'])?mysql_real_escape_string(htmlspecialchars($_POST['status_guru'])):"";
+		$password = isset($_POST['password'])?enkripsiPassword(mysql_real_escape_string(htmlspecialchars($_POST['password']))):"";
+		$nama_ppa = isset($_POST['nama_ppa'])?mysql_real_escape_string(htmlspecialchars($_POST['nama_ppa'])):"";
+		$status_ppa = isset($_POST['status_ppa'])?mysql_real_escape_string(htmlspecialchars($_POST['status_ppa'])):"";
 		$alamat = isset($_POST['alamat'])?mysql_real_escape_string(htmlspecialchars($_POST['alamat'])):"";
 		$tempat_lahir = isset($_POST['tempat_lahir'])?mysql_real_escape_string(htmlspecialchars($_POST['tempat_lahir'])):"";
 		$tgl_lahir = isset($_POST['tgl_lahir'])?mysql_real_escape_string(htmlspecialchars($_POST['tgl_lahir'])):"";
@@ -16,9 +16,9 @@
 		$no_telp = isset($_POST['no_telp'])?mysql_real_escape_string(htmlspecialchars($_POST['no_telp'])):"";
 
 		if($btn=="Tambah"){
-			$sql = "INSERT INTO user (nip, id_jenis_user, password, nama_guru, status_guru, alamat, tempat_lahir, tgl_lahir, jenis_kelamin, status_nikah, no_telp) VALUES('$nip', '$id_jenis_user', '$password', '$nama_guru', '$status_guru', '$alamat', '$tempat_lahir', '$tgl_lahir', '$jenis_kelamin', '$status_nikah', '$no_telp') ";
+			$sql = "INSERT INTO user (nip, id_jenis_user, password, nama_ppa, status_ppa, alamat, tempat_lahir, tgl_lahir, jenis_kelamin, status_nikah, no_telp) VALUES('$nip', '$id_jenis_user', '$password', '$nama_ppa', '$status_ppa', '$alamat', '$tempat_lahir', '$tgl_lahir', '$jenis_kelamin', '$status_nikah', '$no_telp') ";
 		}else{
-			$sql = "UPDATE user SET id_jenis_user = '$id_jenis_user', password = '$password', nama_guru = '$nama_guru', status_guru = '$status_guru', alamat = '$alamat', tempat_lahir = '$tempat_lahir', tgl_lahir = '$tgl_lahir', jenis_kelamin = '$jenis_kelamin', status_nikah = '$status_nikah', no_telp = '$no_telp' WHERE nip = '$nip'";
+			$sql = "UPDATE user SET id_jenis_user = '$id_jenis_user', password = '$password', nama_ppa = '$nama_ppa', status_ppa = '$status_ppa', alamat = '$alamat', tempat_lahir = '$tempat_lahir', tgl_lahir = '$tgl_lahir', jenis_kelamin = '$jenis_kelamin', status_nikah = '$status_nikah', no_telp = '$no_telp' WHERE nip = '$nip'";
 		}
 		$query = mysql_query($sql);
 		if($query){

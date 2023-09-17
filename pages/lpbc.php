@@ -71,7 +71,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col">
-			<h1>Laporan Penilaian Kinerja Guru</h1>
+			<h1>Laporan Penilaian Kinerja PA/PPA</h1>
 			<hr/>
 		<table class="table">
 			<thead>
@@ -125,9 +125,9 @@
 					(SELECT 
 						a.id_nilai, 
 						h.nip as nip_dinilai,
-						h.nama_guru as 'dinilai',
+						h.nama_ppa as 'dinilai',
 						e.nip as nip_penilai, 
-						e.nama_guru as 'penilai',
+						e.nama_ppa as 'penilai',
 						f.jabatan,
 						f.level,
 						c.id_kompetensi,

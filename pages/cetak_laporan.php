@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-    <link rel="icon" href="<?= base_url('../assets/img/logo.png'); ?>">
+    <link rel="icon" href="<?= base_url('../assets/img/assets/img/LOGO UKDW WARNA PNG.png'); ?>">
 	<title>Laporan Penilaian Kinerja</title>
 	<style>
 		.header{
@@ -49,10 +49,10 @@
 </head>
 <body>
 	<div class="header">
-		<img class="img-header" src="file://<?= $_SERVER["DOCUMENT_ROOT"].'/bim/assets/img/logo.png'; ?>" alt="Logo">
-		<h2>Laporan Penilaian Kinerja Priode <?= get_tahun_ajar(); ?></h2>
-		<h1>SD Hang Tuah VII Surabaya</h1>
-		<h3>Jl. Golf 1 Surabaya, Jawa Timur</h3>
+		<img class="img-header" src="file://<?= $_SERVER["DOCUMENT_ROOT"].'/bim/assets/img/LOGO UKDW WARNA PNG.png'; ?>" alt="Logo">
+		<h3>Laporan Penilaian Kinerja Periode <?= get_tahun_ajar(); ?></h3>
+		<h2>Unit Pengembangan Sumber Daya Manusia UKDW</h2>
+		<h3>Jl. Dr. Wahidin Sudirohusodo No.5-25, Yogyakarta</h3>
 		<br>
 		<hr>
 	</div>
@@ -74,7 +74,7 @@
 					$i=0;
 					$sql = "SELECT
 								d.nip,
-								d.nama_guru,
+								d.nama_ppa,
 								SUM(a.hasil_nilai) as nilai,
 								COUNT(a.id_nilai) as jml
 							FROM penilaian a
@@ -101,7 +101,7 @@
 				<tr>
 					<td><?= ++$i; ?></td>
 					<td><?= $row['nip']; ?></td>
-					<td><?= $row['nama_guru']; ?></td>
+					<td><?= $row['nama_ppa']; ?></td>
 					<td><?= number_format($row['nilai'], 2); ?></td>
 				</tr>
 				<?php } ?>
@@ -124,7 +124,7 @@
             <tr>
                 <td><strong>Nama</strong></td>
                 <td>:</td>
-                <td> <?= $row['nama_guru']; ?></td>
+                <td> <?= $row['nama_ppa']; ?></td>
             </tr>
             <tr>
                 <td><strong>Jabatan</strong></td>
@@ -202,9 +202,9 @@
 						(SELECT 
 							a.id_nilai, 
 							h.nip as nip_dinilai,
-							h.nama_guru as 'dinilai',
+							h.nama_ppa as 'dinilai',
 							e.nip as nip_penilai, 
-							e.nama_guru as 'penilai',
+							e.nama_ppa as 'penilai',
 							f.jabatan,
 							f.level,
 							c.id_kompetensi,
@@ -273,7 +273,7 @@
 			$array_bulan = array(1=>"Januari","Februari","Maret", "April", "Mei", "Juni","Juli","Agustus","September","Oktober", "November","Desember");
 			$tgl = date("d")." ".$array_bulan[date("n")]." ".date("Y");
 		?>
-		<p>Surabaya, <?= $tgl; ?></p>
+		<p>Yogyakarta, <?= $tgl; ?></p>
 	</div>
 </body>
 </html>

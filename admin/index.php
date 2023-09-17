@@ -15,7 +15,7 @@
    unset($_SESSION[md5('user')]);
    unset($_SESSION[md5('nama')]);
    unset($_SESSION[md5('level')]);
-    echo "<script>document.location='../login.php';</script>";
+   echo "<script>document.location='../login.php';</script>";
   }
 ?>
 
@@ -28,7 +28,7 @@
     <meta name="author" content="">
     <link rel="icon" href="../../../../favicon.ico">
 
-    <title>Admin Panel</title>
+    <title>Admin PSDM</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
@@ -37,22 +37,27 @@
     <link href="assets/css/dashboard.css" rel="stylesheet">
     <link href="assets/plugins/datatables/jquery.dataTables.min.css" rel="stylesheet">
     <link href="assets/plugins/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+    <link href="../assets/css/font-awesome.min.css" rel="stylesheet">
+
     <script src="assets/js/prompt.js"></script>
 
     <script src="assets/js/jquery.js" ></script>
   </head>
 
   <body>
+
+  
+
     <nav class="navbar navbar-dark sticky-top bg-primary flex-md-nowrap p-0">
       <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">
-        <strong>SD Hang Tuah VII</strong>
+        <strong>Unit PSDM</strong>
         <br>
         <span style="font-size:0.8em;">Tahun Ajar <?= get_tahun_ajar(); ?></span>
       </a>
       
       <ul class="navbar-nav col-sm-6 nav_bar">
         <li class="nav-item text-nowrap">
-          <a class="nav-link" href="index.php?logout">Sign out</a>
+          <a class="nav-link" href="#"  data-toggle="modal" data-target="#modalLogout"><i class="fa fa-sign-out"></i></a>
         </li>
         <li class="nav-item text-nowrap">
           <a class="nav-link" ><?= $_SESSION[md5('nama')]; ?></a>
@@ -132,6 +137,21 @@
     </div>
     <?php unset($_SESSION['flash']); } ?>
 
+    <!-- Modal Logout -->
+    <div class="modal fade" id="modalLogout" tabindex="-1" role="dialog" aria-labelledby="modalLogoutLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header"><h4>Keluar <i class="fa fa-lock"></i></h4></div>
+            <div class="modal-body"><i class="fa fa-question-circle"></i> Anda yakin ingin keluar?</div>
+            <div class="modal-footer">
+              <a class="btn btn-danger" href="index.php?logout">Keluar</a>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- Modal Logout -->
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
@@ -175,5 +195,6 @@
             $(".alert").hide(500);
         }, 3000);
     </script>  
+    
   </body>
 </html>

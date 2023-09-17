@@ -78,7 +78,7 @@
 		<div class="col">
 			<h1>Memilih Penilai</h1>
 			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-				Tambah Guru Penilai
+				Tambah PA/PPA Penilai
 			</button>
 			<!-- Modal -->
 			<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -101,7 +101,7 @@
 				      				echo ",";
 				      			}
 				      			echo '{ nip : "'.$row['nip'].'", ';
-				      			echo ' nama : "'.$row['nama_guru'].'"}';
+				      			echo ' nama : "'.$row['nama_ppa'].'"}';
 				      			
 				      			$i++;
 				      		}
@@ -116,7 +116,7 @@
 				      				echo ",";
 				      			}
 				      			echo '{ nip : "'.$row['nip'].'", ';
-				      			echo ' nama : "'.$row['nama_guru'].'"}';
+				      			echo ' nama : "'.$row['nama_ppa'].'"}';
 				      			
 				      			$i++;
 				      		}
@@ -128,7 +128,7 @@
 				      		<input type="hidden" name="txt_id_penilai" id="txt_id_penilai" value="" />
 				      		<input type="hidden" name="tahun_ajar" value="<?= get_tahun_ajar_id(); ?>" />
 				      		<div class="form-group row">
-			                	<span class="label-text col-md-6 col-form-label text-md-left">Guru Dinilai</span>
+			                	<span class="label-text col-md-6 col-form-label text-md-left">PA/PPA Dinilai</span>
 			                    <div class="col-md-6">
 			                        <select name="penilai" id="cb_guru_penilai" class="form-control" required>
 			                            
@@ -136,7 +136,7 @@
 			                    </div>
 			           	 	</div>
 				      		<div class="form-group row">
-			                	<span class="label-text col-md-6 col-form-label text-md-left">Guru Penilai 1</span>
+			                	<span class="label-text col-md-6 col-form-label text-md-left">PA/PPA Penilai 1</span>
 			                    <div class="col-md-6">
 			                        <select name="guru_1" id="cb_guru_dinilai_1" class="form-control" required>
 			                            
@@ -144,7 +144,7 @@
 			                    </div>
 			           	 	</div>
 				      		<div class="form-group row">
-			                	<span class="label-text col-md-6 col-form-label text-md-left">Guru Penilai 2</span>
+			                	<span class="label-text col-md-6 col-form-label text-md-left">PA/PPA Penilai 2</span>
 			                    <div class="col-md-6">
 			                        <select name="guru_2" id="cb_guru_dinilai_2" class="form-control" required>
 			                            
@@ -152,7 +152,7 @@
 			                    </div>
 			           	 	</div>
 				      		<div class="form-group row">
-			                	<span class="label-text col-md-6 col-form-label text-md-left">Guru Penilai 3</span>
+			                	<span class="label-text col-md-6 col-form-label text-md-left">PA/PPA Penilai 3</span>
 			                    <div class="col-md-6">
 			                        <select name="guru_3" id="cb_guru_dinilai_3" class="form-control" required>
 			                            
@@ -182,8 +182,8 @@
 					<thead>
 						<tr>
 							<th width="10%">No</th>
-							<th width="30%">Guru Dinilai</th>
-							<th width="30%">Guru Penilai</th>
+							<th width="30%">PA/PPA Dinilai</th>
+							<th width="30%">PA/PPA Penilai</th>
 							<th width="30%">Aksi</th>
 						</tr>
 					</thead>
@@ -193,7 +193,7 @@
 							$fi = 0;
 							$id_pen = "";
 							$idper = get_tahun_ajar_id();
-							$sql = "SELECT a.*, b.id_penilai_detail, b.nip as 'nip_dinilai', c.nama_guru as 'penilai', d.nama_guru as 'dinilai', e.jabatan FROM penilai a JOIN penilai_detail b ON a.id_penilai = b.id_penilai  JOIN user c ON a.nip = c.nip JOIN user d ON b.nip = d.nip JOIN jenis_user e ON d.id_jenis_user = e.id_jenis_user WHERE a.id_periode = $idper ORDER BY a.nip, e.level DESC";
+							$sql = "SELECT a.*, b.id_penilai_detail, b.nip as 'nip_dinilai', c.nama_ppa as 'penilai', d.nama_ppa as 'dinilai', e.jabatan FROM penilai a JOIN penilai_detail b ON a.id_penilai = b.id_penilai  JOIN user c ON a.nip = c.nip JOIN user d ON b.nip = d.nip JOIN jenis_user e ON d.id_jenis_user = e.id_jenis_user WHERE a.id_periode = $idper ORDER BY a.nip, e.level DESC";
 							$q = mysql_query($sql);
 							while($row = mysql_fetch_array($q)){
 								if($row['nip']!=$row['nip_dinilai']){

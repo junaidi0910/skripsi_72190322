@@ -1,5 +1,6 @@
 body {
     font-family: "Lato", sans-serif;
+   
 }
 
 
@@ -19,9 +20,9 @@ body {
 }
 
 
-.main {
+/* .main {
     padding: 0px 10px;
-}
+} */
 
 @media screen and (max-height: 450px) {
     .sidenav {padding-top: 15px;}
@@ -39,7 +40,7 @@ body {
 
 @media screen{
     .main{
-        margin-left: 40%; 
+        margin-left: 30%; 
     }
 
     .sidenav{
@@ -82,3 +83,26 @@ body {
   top: 60px;
   right: 10px;
 }
+
+.card{
+    max-width: 400px; /* Sesuaikan lebar card sesuai kebutuhan Anda */
+    background-color: rgba(255, 255, 255, 0.8); /* Ini akan memberikan latar belakang transparan pada card */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    min-height: 100vh; /* Ini akan memastikan card tetap di tengah vertikal bahkan jika konten sedikit */
+
+    background-image: url('../img/ukdw.jpg') !important; /* Ganti 'path/to/rumah.png' dengan lokasi sebenarnya file gambar Anda */
+    background-size: cover; /* Ini akan mengatur gambar agar mengisi seluruh latar belakang */
+    background-repeat: no-repeat; /* Ini akan mencegah gambar diulang-ulang */
+
+    
+   
+ }

@@ -2,7 +2,7 @@
 <html>
 <head>
 	<title>
-		SD Hang Tuah VII Surabaya
+		Unit PSDM
 	</title>
 	<link href="assets/css/bootstrap.min.css" rel="stylesheet">
 	<link href="assets/css/login.css" rel="stylesheet">
@@ -12,15 +12,14 @@
     require_once('config/koneksi.php'); 
     if(isset($_POST['nip'])){
       $nip = isset($_POST['nip'])?mysql_real_escape_string(htmlspecialchars($_POST['nip'])):"";
-      $password = isset($_POST['password'])?mysql_real_escape_string(htmlspecialchars($_POST['password'])):"";
+      $password = isset($_POST['password'])?enkripsiPassword(mysql_real_escape_string(htmlspecialchars($_POST['password']))):"";
 
-      $sql = "SELECT * FROM user a JOIN jenis_user b ON a.id_jenis_user = b.id_jenis_user WHERE a.nip = '$nip' AND a.password = '$password' ";
+      $sql = "SELECT * FROM user a JOIN jenis_user b ON a.id_jenis_user = b.id_jenis_user WHERE a.nip = '$nip' AND a.password = '$password'";
       $q = mysql_query($sql);
       $nr = mysql_num_rows($q);
       if($nr>0){
          $row = mysql_fetch_array($q);
-
-         $nama = $row['nama_guru'];
+         $nama = $row['nama_ppa'];
          $level = $row['level'];
 
          $_SESSION["flash"]["type"] = "success";
@@ -39,35 +38,39 @@
          $_SESSION["flash"]["head"] = "Login Gagal";
          $_SESSION["flash"]["msg"] = "NIP/Password Salah!";
          echo "<script>document.location='login.php';</script>";
-        //header("location:login.php");
       }
    }
 ?>
 	<div>
 		<div class="sidenav">
          <div class="login-main-text">
-            <img width="80%" height="80%" src="assets/img/logo.png" >
-            <h2>SD Hang Tuah VII Surabaya</h2>
+            <img width="80%" height="80%" src="assets/img/LOGO UKDW WARNA PNG.png" >
+            <h2>Unit Pengembangan Sumber Daya Manusia</h2>
          </div>
       </div>
+      
       <div class="main">
          <div class="col-md-6 col-sm-12">
-            <div class="login-form">
-              <h3>Selamat Datang</h3>
-               <form method="post">
-                  <div class="form-group">
-                     <label>Nip</label>
-                     <input type="text" class="form-control" name="nip" required placeholder="Nip">
-                  </div>
-                  <div class="form-group">
-                     <label>Password</label>
-                     <input type="password" class="form-control" name="password" required placeholder="Password">
-                  </div>
-                  <button type="submit" class="btn btn-lg btn-primary">Login</button>
-               </form>
-            </div>
+            <div class="card">
+               <div class="card-body">
+            <h3 class="card-title">Selamat Datang</h3>
+            <form method="post">
+               <div class="form-group">
+                  <label for="nip">Nomor Induk Pegawai</label>
+                  <input type="text" class="form-control" id="nip" name="nip" required placeholder="NIP">
+               </div>
+               <div class="form-group">
+                  <label for="password">Password</label>
+                  <input type="password" class="form-control" id="password" name="password" required placeholder="Password">
+               </div>
+               <button type="submit" class="btn btn-lg btn-primary">Login</button>
+            </form>
          </div>
       </div>
+
+   </div>
+</div>
+
 	</div>
    <?php if(isset($_SESSION["flash"])){ ?>
     <div class="alert alert-<?= $_SESSION["flash"]["type"]; ?> alert-dismissible alert_model" role="alert">

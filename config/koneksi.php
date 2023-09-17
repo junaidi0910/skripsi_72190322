@@ -1,10 +1,11 @@
 <?php
+require_once "parser-php-version.php";
 	session_start();
 	date_default_timezone_set('Asia/Jakarta');
 	$host	= 'localhost';
 	$user	= 'root';
 	$pass	= '';
-	$db		= 'dbpk';
+	$db		= '72190322_skripsi';
 	
 	if(mysql_connect($host, $user, $pass)){
 		if(!mysql_select_db($db)){
@@ -106,9 +107,9 @@
 				(SELECT 
 					a.id_nilai, 
 					h.nip as nip_dinilai,
-					h.nama_guru as 'dinilai',
+					h.nama_ppa as 'dinilai',
 					e.nip as nip_penilai, 
-					e.nama_guru as 'penilai',
+					e.nama_ppa as 'penilai',
 					f.jabatan,
 					f.level,
 					c.id_kompetensi,
@@ -165,6 +166,29 @@
 
 		$ak = ($tot_arr['atasan']*$set[0]) + ($tot_arr['guru']*$set[1]) + ($tot_arr['sendiri']*$set[2]);
 		return number_format($ak, 2);		
+	}
+
+	// Cipher method
+	global $ciphering, $iv_length, $options, $encryption_iv, $encryption_key;
+	$ciphering = "AES-128-CTR";
+	// Pakai OpenSSl Encryption method
+	$iv_length = openssl_cipher_iv_length($ciphering);
+	$options = 0;
+	// Non-NULL Initialization Vector untuk enkripsi
+	$encryption_iv = '1234567891011121';
+	// Encryption key
+	$encryption_key = "72190322";
+
+	function enkripsiPassword($password) {
+		global $ciphering, $iv_length, $options, $encryption_iv, $encryption_key;
+		$password = openssl_encrypt($password, $ciphering, $encryption_key, $options, $encryption_iv);
+		return $password;
+	}
+
+	function dekripsiPassword($password) {
+		global $ciphering, $iv_length, $options, $encryption_iv, $encryption_key;
+		$password = openssl_decrypt($password, $ciphering, $encryption_key, $options, $encryption_iv);
+		return $password;
 	}
 
 ?>

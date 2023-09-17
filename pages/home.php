@@ -12,8 +12,8 @@
 
 <div class="jumbotron" >
   	<div class="container text-center">
-  		<img src="assets/img/logo.png" class="img-logo" >
-    	<h3>SD Hang Tuah VII Surabaya</h3>
+  		<img src="assets/img/LOGO UKDW WARNA PNG.png" class="img-logo" >
+    	<h3>Unit Pengembangan Sumber Daya Manusia UKDW</h3>
   	</div>
 </div>
 
@@ -50,12 +50,12 @@
 			  		<form>
 			  			<div class="form-group">
 			  				<select class="form-control cb_guru">
-			  					<option value="">Semua Guru</option>
+			  					<option value="">Semua PA/PPA</option>
 			  					<?php
 			  						$sql = "SELECT * FROM user a JOIN jenis_user b  ON a.id_jenis_user = b.id_jenis_user WHERE b.level = 1";
 			  						$q = mysql_query($sql);
 			  						while($row = mysql_fetch_array($q)){
-			  							echo "<option value='$row[nip]'>$row[nama_guru]</option>";
+			  							echo "<option value='$row[nip]'>$row[nama_ppa]</option>";
 			  						}
 			  					?>
 			  				</select>
@@ -76,7 +76,7 @@ echo "<script>";
 $id_periode = get_tahun_ajar_id();
 $sql = "SELECT
 			d.nip,
-			d.nama_guru,
+			d.nama_ppa,
 			SUM(a.hasil_nilai) as nilai,
 			COUNT(a.id_nilai) as jml
 		FROM penilaian a
@@ -102,16 +102,16 @@ $q = mysql_query($sql);
 $i = 0;
 echo "var data_tertinggi = [";
 while($b = mysql_fetch_array($q)){
-	$a[] = array('nilai' => get_tot_nilai($b['nip'], get_tahun_ajar_id()), 'nama_guru' => $b['nama_guru']);;
+	$a[] = array('nilai' => get_tot_nilai($b['nip'], get_tahun_ajar_id()), 'nama_ppa' => $b['nama_ppa']);;
 }
 arsort($a);
 //while($row = mysql_fetch_array($q)){
 foreach ($a as $key => $row) {
 	if($i<5){
 		if($i==0){
-			echo "{nama:'$row[nama_guru]', nilai:$row[nilai]}";
+			echo "{nama:'$row[nama_ppa]', nilai:$row[nilai]}";
 		}else{
-			echo ", {nama:'$row[nama_guru]', nilai:$row[nilai]}";
+			echo ", {nama:'$row[nama_ppa]', nilai:$row[nilai]}";
 		}
 	}
 	$i++;
@@ -122,7 +122,7 @@ echo "\n";
 // terendah
 $sql = "SELECT
 			d.nip,
-			d.nama_guru,
+			d.nama_ppa,
 			SUM(a.hasil_nilai) as nilai,
 			COUNT(a.id_nilai) as jml
 		FROM penilaian a
@@ -148,15 +148,15 @@ $i = 0;
 echo "var data_terendah = [";
 $a = [];
 while($b = mysql_fetch_array($q)){
-	$a[] = array('nilai' => get_tot_nilai($b['nip'], get_tahun_ajar_id()), 'nama_guru' => $b['nama_guru']);;
+	$a[] = array('nilai' => get_tot_nilai($b['nip'], get_tahun_ajar_id()), 'nama_ppa' => $b['nama_ppa']);;
 }
 asort($a);
 foreach ($a as $key => $row) {
 	if($i<5){
 		if($i==0){
-			echo "{nama:'$row[nama_guru]', nilai:$row[nilai]}";
+			echo "{nama:'$row[nama_ppa]', nilai:$row[nilai]}";
 		}else{
-			echo ", {nama:'$row[nama_guru]', nilai:$row[nilai]}";
+			echo ", {nama:'$row[nama_ppa]', nilai:$row[nilai]}";
 		}
 	}
 	$i++;
@@ -268,8 +268,8 @@ echo "</script>";
 </style>
 <div class="jumbotron" >
   	<div class="container text-center">
-  		<img src="assets/img/logo.png" >
-    	<h1 class="display-4">SD Hang Tuah VII Surabaya</h1>
+  		<img width='100px' src="assets/img/LOGO UKDW WARNA PNG.png" >
+    	<h1 class="display-4">Unit PSDM UKDW</h1>
   	</div>
 </div>
 

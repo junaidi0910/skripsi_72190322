@@ -27,7 +27,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" href="<?= base_url('assets/img/logo.png'); ?>">
 
-    <title>SD Hang Tuah VII Surabaya</title>
+    <title>Unit PSDM UKDW</title>
 
     <!-- Bootstrap core CSS -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet">
@@ -45,11 +45,11 @@
     <!-- Custom styles for this template -->
 
   </head>
-  <body style="background-image: url(assets/img/pattern.jpg)">
+  <body style="background-image: url(assets/img/whitebg.jpg); background-size: cover; background-attachment: fixed;">
     
 
     <nav class="navbar navbar-icon-top navbar-expand-lg navbar-dark bg-primary fixed-top">
-      <a class="navbar-brand" href="index.php">SD Hang Tuah VII Surabaya</a>
+      <a class="navbar-brand" href="index.php">Unit PSDM UKDW</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -97,9 +97,9 @@
               if($_SESSION[md5('level')] == 3 || $_SESSION[md5('level')] == 2 ){
                 $sql_a = "SELECT 
                           a.nip AS 'nip_dinilai',
-                          d.nama_guru AS 'nama_dinilai',
+                          d.nama_ppa AS 'nama_dinilai',
                           b.nip AS 'nama_penilai',
-                          e.nama_guru AS 'nama_penilai',
+                          e.nama_ppa AS 'nama_penilai',
                           SUM(c.hasil_nilai) AS nilai
                         FROM (penilai a JOIN user d ON a.nip = d.nip)
                         JOIN (penilai_detail b  JOIN user e ON b.nip = e.nip) ON a.id_penilai = b.id_penilai
@@ -134,11 +134,11 @@
               ?>
               <a class="dropdown-item" href="index.php?p=melakukanpen&id=<?= $row['id_penilai']; ?>">
                 <span data-feather="user"></span> &nbsp;&nbsp;&nbsp;
-                <?= $row['nama_guru']; ?>
+                <?= $row['nama_ppa']; ?>
               </a>
               <?php } ?>
               <p class="dropdown-item disabled" >
-                Guru yang belum melakukan penilaian : 
+                PA/PPA yang belum melakukan penilaian : 
               </p>
               <?php
                 while($row = mysql_fetch_array($q_a)){
@@ -159,14 +159,14 @@
               ?>
               <a class="dropdown-item" href="index.php?p=melakukanpen&id=<?= $row['id_penilai']; ?>">
                 <span data-feather="user"></span> &nbsp;&nbsp;&nbsp;
-                <?= $row['nama_guru']; ?>
+                <?= $row['nama_ppa']; ?>
               </a>
               <?php } ?>
             </div>
             <?php }else if($nr>0){?>
             <div class="dropdown-menu" style="left:-250px">
               <p class="dropdown-item disabled" >
-                Guru yang belum melakukan penilaian : 
+                PA/PPA yang belum melakukan penilaian : 
               </p>
               <?php
                 while($row = mysql_fetch_array($q_a)){
@@ -186,7 +186,7 @@
             </a>
             <div class="dropdown-menu">
               <a class="dropdown-item" href="index.php?p=profil"><span data-feather="user"></span>Profile</a>
-              <a class="dropdown-item" href="index.php?logout"><span data-feather="log-out"></span>Log Out</a>
+              <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalLogout"><span data-feather="log-out"></span>Log Out</a>
             </div>
           </li>
         </ul>
@@ -213,7 +213,7 @@
       <div class="container">
         <div class="row">
           <div class="col text-right">
-            <span class="text-white">SD Hang Tuah VII Surabaya | 2019</span>
+            <span class="text-white">Unit PSDM UKDW | By : Junaidi</span>
           </div>
         </div>
       </div>
@@ -226,6 +226,22 @@
       <strong><?= $_SESSION["flash"]["head"]; ?></strong> <?= $_SESSION["flash"]["msg"]; ?>
     </div>
     <?php unset($_SESSION['flash']); } ?>
+
+    <!-- Modal Logout -->
+    <div class="modal fade" id="modalLogout" tabindex="-1" role="dialog" aria-labelledby="modalLogoutLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header"><h4>Keluar <i class="fa fa-lock"></i></h4></div>
+            <div class="modal-body"><i class="fa fa-question-circle"></i> Anda yakin ingin keluar?</div>
+            <div class="modal-footer">
+              <a class="btn btn-danger" href="index.php?logout">Keluar</a>
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- Modal Logout -->
+
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

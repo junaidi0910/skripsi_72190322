@@ -40,9 +40,9 @@
 					(SELECT 
 						a.id_nilai, 
 						h.nip as nip_dinilai,
-						h.nama_guru as 'dinilai',
+						h.nama_ppa as 'dinilai',
 						e.nip as nip_penilai, 
-						e.nama_guru as 'penilai',
+						e.nama_ppa as 'penilai',
 						f.jabatan,
 						f.level,
 						c.id_kompetensi,
@@ -84,7 +84,7 @@
 				$tot_sosial += $ss;
 				$tot_profesional += $pr;
 				/* prestasi kinerja individu */
-				$tot = ($pg*($b_Pedagogik/100)) + ($kp*($b_Kepribadian/100)) + ($ss*($b_Sosial/100)) + ($pr*($b_Profesional/100));
+				$tot = ($pg*($tot_pedagodik/100)) + ($kp*($tot_kepribadian/100)) + ($ss*($tot_sosial/100)) + ($pr*($tot_profesional/100));
 
 				if($row['level']==2 || $row['level']==3){
 					$tot_arr['atasan'] += $tot;
@@ -134,7 +134,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-8">
-			<h1>Laporan Penilaian Kinerja Guru</h1>
+			<h1>Laporan Penilaian Kinerja PA/PPA</h1>
 			<h3>Periode <?= get_tahun_ajar($id_periode); ?></h3>
 		</div>
 		<div class="col-4">
