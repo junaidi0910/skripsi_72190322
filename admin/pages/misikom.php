@@ -93,7 +93,7 @@
 					while ($row = mysql_fetch_assoc($q)) {
 						$id_isi = $row['id_isi']; 
 						$id_kompetensi = $row['id_kompetensi']; 
-						$$row['id_kompetensi'] = $row['id_kompetensi']; 
+						// $$row['id_kompetensi'] = $row['id_kompetensi']; 
 						$isi_kompetensi = $row['isi_kompetensi'];
 						$btn = "Ubah"; 
 					}
@@ -104,7 +104,7 @@
 					$('#exampleModal').modal('show');
 					
 					$('#exampleModal').on('hidden.bs.modal', function(e){
-						document.location = 'index.php?p=mjuser';
+						document.location = 'index.php?p=misikom';
 					});
 			    });
 			</script>
@@ -133,7 +133,7 @@
 							          			$jb = mysql_query("SELECT * FROM jenis_kompetensi");
 							          			while($rj = mysql_fetch_array($jb)){
 							          		?>
-									      	<option value="<?= $rj['id_kompetensi']?>" <?= isset($$rj['nama_kompetensi'])?"selected":''?> ><?= $rj['nama_kompetensi']; ?></option>
+									      	<option value="<?= $rj['id_kompetensi']?>" <?= $rj['id_kompetensi'] == $id_kompetensi ?"selected":''?> ><?= $rj['nama_kompetensi']; ?></option>
 									   		<?php } ?>
 									   	</select>
 							    	</div>

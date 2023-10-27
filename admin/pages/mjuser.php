@@ -177,9 +177,7 @@
 							<td>
 								<button class="btn btn-outline-info btn-sm btn_info" id="<?= $row['id_jenis_user'];?>"><span data-feather="info"></span></button>
 								<a href="index.php?p=mjuser&ubah=true&id_jenis_user=<?= $row['id_jenis_user'];?>" class="btn btn-outline-warning btn-sm" id="<?= $row['id_jenis_user'];?>"><span data-feather="edit"></span></a>
-							<!-- 
 								<button href="#" class="btn btn-outline-danger btn-sm btn_hapus" id="<?= $row['id_jenis_user'];?>"><span data-feather="trash-2"></span></button>
-							 -->
 							</td>
 						</tr>
 						<?php } ?>

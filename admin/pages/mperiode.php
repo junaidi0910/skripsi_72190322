@@ -239,6 +239,7 @@
 									<!-- <a href="index.php?p=mperiode&setaktif=true&id_periode=<?= $row['id_periode'];?>" class="btn btn-outline-info btn-sm"><span data-feather="check"></span></a> -->
 								<?php } ?>
 								<a href="index.php?p=mperiode&ubah=true&id_periode=<?= $row['id_periode'];?>" class="btn btn-outline-warning btn-sm"><span data-feather="edit"></span></a>
+								<button href="#" class="btn btn-outline-danger btn-sm btn_hapus" id="<?= $row['id_periode'];?>"><span data-feather="trash-2"></span></button>
 							</td>
 						</tr>
 						<?php } ?>
@@ -248,3 +249,33 @@
 		</div>
 	</div>
 </div>
+<div class="modal fade hapusdata" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  	<div class="modal-dialog modal-md">
+    	<div class="modal-content">
+      		<div class="modal-header">
+		   	 	<h5 class="modal-title" id="exampleModalLabel">Hapus Data Periode</h5>
+		      	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		        	<span aria-hidden="true">&times;</span>
+		        	<form method="post" action="modal/p_periode.php">
+		        		
+		        	<input type="hidden" name="id_delete" id="id_delete">
+		      	</button>
+		    </div>
+		    <div class="modal-body">
+		    	<input type="submit" class="btn btn-danger btn_delete" name="btnDelete" value="Hapus">
+		        </form>
+		    	<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+		    </div>
+		</div>
+  	</div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+		$(".btn_hapus").click(function(){
+			var id = $(this).attr("id");
+			$("#id_delete").val(id);
+			$('.hapusdata').modal('show');
+		});
+    });
+</script>
