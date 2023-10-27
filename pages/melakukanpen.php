@@ -322,7 +322,6 @@ input[type=number] {
                             <td class="p-0">Kurang</td>
                         </tr>
                     </table>
-                    <?php } ?>
                 </div>
                 <div class="container">
                     <div class="float-right">
@@ -330,6 +329,7 @@ input[type=number] {
                         <button type="submit" class="btn btn-primary btn-md">Simpan</button>
                     </div>
                 </div>
+                <?php } ?>
             </div>
         </form>
     </div>
