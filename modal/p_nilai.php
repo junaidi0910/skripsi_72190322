@@ -25,10 +25,11 @@
 		}
 		$sql = "INSERT INTO penilaian (id_penilai_detail, id_isi, hasil_nilai) VALUES ";
 		$i = 0;
+
 		foreach ($_POST as $k => $v) {
-			if(substr($k, 0, 10)=='kompetensi'){
+			if(substr($k, 0, 16)=='nilai_kompetensi'){
 				//echo "$k = $v <br>";
-				$id_isi = explode("_", $k)[1];
+				$id_isi = explode("nilai_kompetensi_", $k)[1];
 				if($i==0){
 					$sql .= "($id_penilaian_detail, $id_isi, $v)";
 				}else{
@@ -39,12 +40,12 @@
 		}
 		$insert = mysql_query($sql);
 		if($insert){
-
 			$_SESSION["flash"]["type"] = "success";
 			$_SESSION["flash"]["head"] = "Sukses";
 			$_SESSION["flash"]["msg"] = "Data berhasil disimpan!";
 		}else{
-			
+			// echo $sql;
+			// die(mysql_error());
 			$_SESSION["flash"]["type"] = "danger";
 			$_SESSION["flash"]["head"] = "Terjadi Kesalahan";
 			$_SESSION["flash"]["msg"] = "Data gagal disimpan! ";
