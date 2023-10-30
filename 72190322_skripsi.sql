@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.3
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 26, 2023 at 06:34 PM
--- Server version: 10.1.35-MariaDB
--- PHP Version: 7.2.9
+-- Generation Time: Oct 30, 2023 at 08:21 AM
+-- Server version: 10.1.28-MariaDB
+-- PHP Version: 7.1.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -47,7 +47,8 @@ INSERT INTO `isi_kompetensi` (`id_isi`, `id_kompetensi`, `isi_kompetensi`, `ket`
 (7, 10, 'Sikap Kerja (Kerja sama)', '0,1,2'),
 (8, 10, 'Prakarsa', '0,1,2'),
 (9, 10, 'Prestasi', '0,1,2'),
-(10, 10, 'Pengabdian Masyarakat', '0,1,2');
+(10, 10, 'Pengabdian Masyarakat', '0,1,2'),
+(11, 10, 'Intelektualitas', '0,1,2');
 
 -- --------------------------------------------------------
 
@@ -108,7 +109,9 @@ CREATE TABLE `penilai` (
 --
 
 INSERT INTO `penilai` (`id_penilai`, `nip`, `id_periode`) VALUES
-(2, '2012091200113511', 4);
+(2, '2012091200113511', 4),
+(3, '72190322', 4),
+(4, '72190377', 4);
 
 -- --------------------------------------------------------
 
@@ -135,7 +138,47 @@ INSERT INTO `penilaian` (`id_nilai`, `id_penilai_detail`, `id_isi`, `hasil_nilai
 (5, 10, 7, 4),
 (6, 10, 8, 4),
 (7, 10, 9, 4),
-(8, 10, 10, 4);
+(8, 10, 10, 4),
+(17, 16, 3, 92),
+(18, 16, 4, 92),
+(19, 16, 5, 92),
+(20, 16, 6, 92),
+(21, 16, 7, 92),
+(22, 16, 8, 92),
+(23, 16, 9, 92),
+(24, 16, 10, 92),
+(25, 22, 3, 92),
+(26, 22, 4, 92),
+(27, 22, 5, 92),
+(28, 22, 6, 92),
+(29, 22, 7, 92),
+(30, 22, 8, 92),
+(31, 22, 9, 92),
+(32, 22, 10, 92),
+(33, 7, 3, 92),
+(34, 7, 4, 92),
+(35, 7, 5, 92),
+(36, 7, 6, 92),
+(37, 7, 7, 92),
+(38, 7, 8, 92),
+(39, 7, 9, 92),
+(40, 7, 10, 92),
+(41, 20, 3, 92),
+(42, 20, 4, 92),
+(43, 20, 5, 92),
+(44, 20, 6, 92),
+(45, 20, 7, 92),
+(46, 20, 8, 92),
+(47, 20, 9, 92),
+(48, 20, 10, 92),
+(49, 18, 3, 92),
+(50, 18, 4, 92),
+(51, 18, 5, 92),
+(52, 18, 6, 92),
+(53, 18, 7, 92),
+(54, 18, 8, 92),
+(55, 18, 9, 92),
+(56, 18, 10, 92);
 
 -- --------------------------------------------------------
 
@@ -158,7 +201,19 @@ INSERT INTO `penilai_detail` (`id_penilai_detail`, `id_penilai`, `nip`) VALUES
 (9, 2, '72190456'),
 (10, 2, '2012091200113599'),
 (11, 2, '2012091200113501'),
-(12, 2, '2012091200113511');
+(12, 2, '2012091200113511'),
+(13, 3, '2012091200113511'),
+(14, 3, '72190377'),
+(15, 3, '72190456'),
+(16, 3, '2012091200113599'),
+(17, 3, '2012091200113501'),
+(18, 3, '72190322'),
+(19, 4, '2012091200113511'),
+(20, 4, '72190322'),
+(21, 4, '72190456'),
+(22, 4, '2012091200113599'),
+(23, 4, '2012091200113501'),
+(24, 4, '72190377');
 
 -- --------------------------------------------------------
 
@@ -212,13 +267,14 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`nip`, `id_jenis_user`, `password`, `nama_ppa`, `golongan`, `jabatan`, `unit_organisasi`, `status_ppa`, `alamat`, `tempat_lahir`, `tgl_lahir`, `jenis_kelamin`, `status_nikah`, `no_telp`) VALUES
-('2012091200113500', 7, '10mg', 'Ferdy (Admin PSDM)', NULL, NULL, NULL, 'Tetap', 'Kediri Bos', 'Kediri', '1996-03-21', 'L', 'B', '0819283746378'),
-('2012091200113501', 4, '10mg', 'Agum Gumelar (Pejabat Penilai)', NULL, NULL, NULL, 'Tetap', 'Surabaya', 'Surabaya', '1996-12-21', 'L', 'N', '0819283776666'),
+('2012091200113500', 7, '10mg', 'Ferdy (Admin PSDM)', 'ppa', 'Dosen', 'fakultas TI', 'Tetap', 'Kediri Bos', 'Kediri', '1996-03-21', 'L', 'B', '0819283746378'),
+('2012091200113501', 4, '10mg', 'Agum Gumelar (Pejabat Penilai)', 'golongan A', 'dosen biasa', 'fakultas TI', 'Tetap', 'Surabaya', 'Surabaya', '1996-12-21', 'L', 'N', '0819283776666'),
 ('2012091200113511', 5, '10mg', 'Andriasyah Putra (PA)', 'Test', 'Test2', 'Test3', 'Tetap', 'Kupang Panjaan', 'Surabaya', '1987-10-02', 'L', '', '088999876765'),
-('2012091200113599', 8, '10mg', 'Firdaus (Atasan)', NULL, NULL, NULL, 'Tetap', 'jalan alianyang', 'Pontianak', '2023-10-12', 'L', 'B', '082166835690'),
+('2012091200113599', 8, '10mg', 'Firdaus (Atasan)', 'karyaa', 'wakil kaprodi', 'fakultas TI', 'Tetap', 'jalan alianyang', 'Pontianak', '2023-10-12', 'L', 'B', '082166835690'),
 ('72190322', 5, '10mg', 'Junaidi', 'Pembina Utama', 'Dosen', 'Fakultas Teknologi Informasi', 'Tetap', 'Jalan Balapan No 5', 'Singkawang', '2023-10-12', 'L', 'B', '082154379452'),
-('72190377', 5, '10mg', 'I kadek yudi', NULL, NULL, NULL, 'Tetap', 'Jalan Iskandar', 'Luwuk', '2023-10-13', 'L', 'B', '08995678234'),
-('72190456', 5, '10mg', 'Rafael', NULL, NULL, NULL, 'Tetap', 'Jalan Manado', 'Manado', '2023-10-01', 'L', 'B', '08995672345');
+('72190377', 5, '10mg', 'I kadek yudi', 'karya', 'dosen biasa', 'fakultas TI', 'Tetap', 'Jalan Iskandar', 'Luwuk', '2023-10-13', 'L', 'B', '08995678234'),
+('72190456', 5, '10mg', 'Rafael', 'Karya', 'dosen biasa', 'Fakultas TI', 'Tetap', 'Jalan Manado', 'Manado', '2023-10-01', 'L', 'B', '08995672345'),
+('72190678', 5, '10mg', 'Yosia Agil', NULL, NULL, NULL, 'Tetap', 'Jalan Sejahtera no 56', 'Wonosobo', '2023-10-10', 'L', 'B', '082166835688');
 
 --
 -- Indexes for dumped tables
@@ -288,7 +344,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `isi_kompetensi`
 --
 ALTER TABLE `isi_kompetensi`
-  MODIFY `id_isi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_isi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `jenis_kompetensi`
@@ -306,19 +362,19 @@ ALTER TABLE `jenis_user`
 -- AUTO_INCREMENT for table `penilai`
 --
 ALTER TABLE `penilai`
-  MODIFY `id_penilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_penilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `penilaian`
 --
 ALTER TABLE `penilaian`
-  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
 
 --
 -- AUTO_INCREMENT for table `penilai_detail`
 --
 ALTER TABLE `penilai_detail`
-  MODIFY `id_penilai_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_penilai_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `periode`

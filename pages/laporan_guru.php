@@ -134,7 +134,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-8">
-			<h1>Laporan Penilaian Kinerja PA/PPA</h1>
+			<h1>Laporan Penilaian Kinerja DP3</h1>
 			<h3>Periode <?= get_tahun_ajar($id_periode); ?></h3>
 		</div>
 		<div class="col-4">

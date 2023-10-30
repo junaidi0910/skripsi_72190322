@@ -53,7 +53,7 @@
          <div class="col-md-6 col-sm-12">
             <div class="card">
                <div class="card-body">
-            <h3 class="card-title">Selamat Datang</h3>
+            <h3 class="card-title">DAFTAR PENILAIAN PELAKSANAAN PEKERJAAN (DP3)</h3>
             <form method="post">
                <div class="form-group">
                   <label for="nip">Nomor Induk Pegawai</label>

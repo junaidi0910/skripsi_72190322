@@ -213,7 +213,7 @@
       <div class="container">
         <div class="row">
           <div class="col text-right">
-            <span class="text-white">Unit PSDM UKDW | By : Junaidi</span>
+            <span class="text-white">Penilaian Kinerja DP3 | By : Junaidi</span>
           </div>
         </div>
       </div>

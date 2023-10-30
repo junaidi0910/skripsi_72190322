@@ -13,62 +13,10 @@
 <div class="jumbotron" >
   	<div class="container text-center">
   		<img src="assets/img/LOGO UKDW WARNA PNG.png" class="img-logo" >
-    	<h3>Unit Pengembangan Sumber Daya Manusia UKDW</h3>
+    	<h3>Penilaian Kinerja DP3 UKDW</h3>
   	</div>
 </div>
 
-<div class="container">
-	<div class="row">
-		<div class="col-6">
-			<div class="card">
-			  	<div class="card-header bg-success">
-			    	<p class="card-title text-white"><strong>5 Nilai Tertinggi</strong></p>
-			  	</div>
-			  	<div class="card-body">
-			    	<div id="chart-nilai-tertinggi"></div>
-			  	</div>
-			</div>
-		</div>
-		<div class="col-6">
-			<div class="card">
-			  	<div class="card-header bg-danger">
-			    	<p class="card-title text-white"><strong>5 Nilai Terendah</strong></p>
-			  	</div>
-			  	<div class="card-body">
-			    	<div id="chart-nilai-terendah"></div>
-			  	</div>
-			</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-12" style="margin-top:20px">
-			<div class="card">
-			  	<div class="card-header bg-warning">
-			    	<p class="card-title text-white"><strong>Nilai Perperiode</strong></p>
-			  	</div>
-			  	<div class="card-body">
-			  		<form>
-			  			<div class="form-group">
-			  				<select class="form-control cb_guru">
-			  					<option value="">Semua PA/PPA</option>
-			  					<?php
-			  						$sql = "SELECT * FROM user a JOIN jenis_user b  ON a.id_jenis_user = b.id_jenis_user WHERE b.level = 1";
-			  						$q = mysql_query($sql);
-			  						while($row = mysql_fetch_array($q)){
-			  							echo "<option value='$row[nip]'>$row[nama_ppa]</option>";
-			  						}
-			  					?>
-			  				</select>
-			  			</div>
-			  		</form>
-			  		<hr>
-			    	<div id="chart-nilai-periode" style="height: 300px; width: 100%;"></div>
-			    	<div class="load_chart"></div>
-			  	</div>
-			</div>
-		</div>
-	</div>
-</div>
 <?php
 
 echo "<script>";
@@ -269,7 +217,7 @@ echo "</script>";
 <div class="jumbotron" >
   	<div class="container text-center">
   		<img width='100px' src="assets/img/LOGO UKDW WARNA PNG.png" >
-    	<h1 class="display-4">Unit PSDM UKDW</h1>
+    	<h1 class="display-4">Penilaian Kinerja DP3</h1>
   	</div>
 </div>
 

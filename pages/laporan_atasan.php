@@ -1,7 +1,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col">
-			<h1>Laporan Penilaian Kinerja PA&PPA</h1>
+			<h1>Laporan Penilaian Kinerja DP3</h1>
 			<h3>Periode <?= get_tahun_ajar(); ?></h3>
 			<hr/>
 		</div>
@@ -19,7 +19,7 @@
 						<th>No</th>
 						<th>NIP</th>
 						<th>Nama</th>
-						<th>Total Nilai</th>
+						<th>Nilai rata-rata</th>
 						<th>Aksi</th>
 					</tr>
 				</thead>

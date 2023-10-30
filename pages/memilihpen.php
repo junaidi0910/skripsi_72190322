@@ -78,7 +78,7 @@
 		<div class="col">
 			<h1>Memilih Penilai</h1>
 			<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-				Tambah PA/PPA Penilai
+				Tambah Penilaian
 			</button>
 			<!-- Modal -->
 			<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
