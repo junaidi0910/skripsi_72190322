@@ -153,7 +153,7 @@ input[type=number] {
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="row">
                 <div class="col-lg-7 col-md-7 col-sm-12">
-                    <h2>Penilaian Kinerja</h2>
+                    <h2>Penilaian Kinerja (DP3)</h2>
                     <br>
                     <table class="table">
                         <tr>
@@ -202,21 +202,21 @@ input[type=number] {
                         <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Kompetensi Sosial</a>
                         <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contacti" role="tab" aria-controls="nav-contacti" aria-selected="false">Kompetensi Profesional</a>
                         --><?php 
-                            $sql = "SELECT * FROM jenis_kompetensi";
+                            $sql = "SELECT * FROM kelompok_penilaian";
                             $q = mysql_query($sql);
                             $i = 0;
                             $data_kompetensi = [];
                             while($row = mysql_fetch_array($q)){
-                                $data_kompetensi[$i]['id_kompetensi'] = $row['id_kompetensi'];
-                                $data_kompetensi[$i]['nama_kompetensi'] = $row['nama_kompetensi'];
-                                $data_kompetensi[$i]['bobot_kompetensi'] = $row['bobot_kompetensi'];
+                                $data_kompetensi[$i]['id_kelpenilaian'] = $row['id_kelpenilaian'];
+                                $data_kompetensi[$i]['nama_kelpenilaian'] = $row['nama_kelpenilaian'];
+                                $data_kompetensi[$i]['bobot_kelpenilaian'] = $row['bobot_kelpenilaian'];
                                 if($i==0){
                         ?>
-                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-<?= $row['id_kompetensi']; ?>" role="tab" aria-controls="nav-home" aria-selected="true"><?= $row['nama_kompetensi']; ?></a>
+                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-<?= $row['id_kelpenilaian']; ?>" role="tab" aria-controls="nav-home" aria-selected="true"><?= $row['nama_kelpenilaian']; ?></a>
                         <?php
                                 }else{
                         ?>
-                            <a class="nav-item nav-link" id="nav-home-tab" data-toggle="tab" href="#nav-<?= $row['id_kompetensi']; ?>" role="tab" aria-controls="nav-home" aria-selected="true"><?= $row['nama_kompetensi']; ?></a>
+                            <a class="nav-item nav-link" id="nav-home-tab" data-toggle="tab" href="#nav-<?= $row['id_kelpenilaian']; ?>" role="tab" aria-controls="nav-home" aria-selected="true"><?= $row['nama_kelpenilaian']; ?></a>
                         <?php 
                                 }
                                 $i++;
@@ -233,12 +233,12 @@ input[type=number] {
                                 $ext = "";
                             }
                         ?>
-                            <div class="tab-pane fade <?= $ext;?>" id="nav-<?= $v['id_kompetensi']; ?>" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <div class="tab-pane fade <?= $ext;?>" id="nav-<?= $v['id_kelpenilaian']; ?>" role="tabpanel" aria-labelledby="nav-profile-tab">
                                 <table class="table table-striped mt-3">
                                     <thead>
                                         <tr>
                                             <th width="5%">No</th>
-                                            <th width="30%">Isi Kompetensi</th>
+                                            <th width="30%">isi penilaian</th>
                                             <th width="10%">Angka</th>
                                             <th width="10%">Sebutan</th>
                                             <!-- <th >1</th>
@@ -250,13 +250,13 @@ input[type=number] {
                                     <tbody>
                                         <?php
                                             $i=0;
-                                            $sq = "SELECT * FROM isi_kompetensi WHERE id_kompetensi = $v[id_kompetensi] AND ket LIKE '%$sebagai%' ";
+                                            $sq = "SELECT * FROM isi_penilaian WHERE id_kelpenilaian = $v[id_kelpenilaian] AND ket LIKE '%$sebagai%' ";
                                             $qs = mysql_query($sq);
                                             while($row = mysql_fetch_array($qs)){
                                         ?>
                                         <tr>
                                             <td ><?= ++$i; ?></td>
-                                            <td ><?= $row['isi_kompetensi']; ?></td>
+                                            <td ><?= $row['isi_penilaian']; ?></td>
                                             <td><input type="number" name="nilai_kompetensi_<?= $row['id_isi']; ?>" id="nilai_kompetensi_<?= $row['id_isi']; ?>" style="width:50px;" class="angka"/></td>
                                             <td id="kompetensi_<?= $row['id_isi']; ?>"></td>
                                             <!-- <td class="form-group">

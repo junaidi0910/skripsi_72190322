@@ -90,7 +90,7 @@
 																JOIN penilai_detail pd ON p.id_penilai = pd.id_penilai
 																WHERE p.nip = d.nip)
 																*
-																(SELECT COUNT(*) FROM isi_kompetensi)
+																(SELECT COUNT(*) FROM isi_penilaian)
 															) as tot
 															FROM dual
 														)
@@ -135,20 +135,20 @@
 		<h4>Detail Penilaian</h4>
 		<?php
 			$sql = "SELECT 
-							a.id_kompetensi,
-							a.nama_kompetensi,
-							a.bobot_kompetensi,
+							a.id_kelpenilaian,
+							a.nama_kelpenilaian,
+							a.bobot_kelpenilaian,
 							COUNT(b.id_isi) as jml
-						FROM jenis_kompetensi a
-						JOIN isi_kompetensi b ON a.id_kompetensi = b.id_kompetensi
-						GROUP BY a.id_kompetensi";
+						FROM kelompok_penilaian a
+						JOIN isi_penilaian b ON a.id_kelpenilaian = b.id_kelpenilaian
+						GROUP BY a.id_kelpenilaian";
 				$q = mysql_query($sql);
 				
 				$data_kompetensi = [];
 
 				while($row = mysql_fetch_array($q)){
-					${"b_".$row['nama_kompetensi']} = $row['bobot_kompetensi'];
-					${"jml_".$row['nama_kompetensi']} = $row['bobot_kompetensi'];
+					${"b_".$row['nama_kelpenilaian']} = $row['bobot_kelpenilaian'];
+					${"jml_".$row['nama_kelpenilaian']} = $row['bobot_kelpenilaian'];
 					$data_kompetensi[] = $row;
 				}
 		?>
@@ -165,7 +165,7 @@
 				<tr>
 					<?php
 						foreach ($data_kompetensi as $key => $value) {
-							echo "<th class='txt_center'>$value[nama_kompetensi]</th>";
+							echo "<th class='txt_center'>$value[nama_kelpenilaian]</th>";
 						}
 					?>
 				</tr>
@@ -188,7 +188,7 @@
 				$id_periode = get_tahun_ajar_id();
 				$komp = '';
 				foreach ($data_kompetensi as $key => $value) {
-					$komp .= "SUM( IF(tbnilai.nama_kompetensi = '$value[nama_kompetensi]', tbnilai.nilai, 0) ) AS '$value[nama_kompetensi]', ";
+					$komp .= "SUM( IF(tbnilai.nama_kelpenilaian = '$value[nama_kelpenilaian]', tbnilai.nilai, 0) ) AS '$value[nama_kelpenilaian]', ";
 				} 
 
 				$sql = "SELECT 
@@ -207,17 +207,17 @@
 							e.nama_ppa as 'penilai',
 							f.jabatan,
 							f.level,
-							c.id_kompetensi,
-							c.nama_kompetensi,
-							c.bobot_kompetensi,
+							c.id_kelpenilaian,
+							c.nama_kelpenilaian,
+							c.bobot_kelpenilaian,
 							SUM(a.hasil_nilai) as nilai
 						FROM penilaian a 
-						JOIN isi_kompetensi b ON a.id_isi = b.id_isi
-						JOIN jenis_kompetensi c ON b.id_kompetensi = c.id_kompetensi
+						JOIN isi_penilaian b ON a.id_isi = b.id_isi
+						JOIN kelompok_penilaian c ON b.id_kelpenilaian = c.id_kelpenilaian
 						JOIN (penilai_detail d JOIN user e ON d.nip = e.nip JOIN jenis_user f ON f.id_jenis_user = e.id_jenis_user) ON d.id_penilai_detail = a.id_penilai_detail 
 						JOIN (penilai g JOIN user h ON g.nip = h.nip ) ON d.id_penilai = g.id_penilai
 						WHERE a.id_penilai_detail IN ($id_penilai_detail) AND g.id_periode = $id_periode
-						GROUP BY a.id_penilai_detail, c.id_kompetensi
+						GROUP BY a.id_penilai_detail, c.id_kelpenilaian
 						ORDER BY 4) as tbnilai
 						GROUP BY tbnilai.penilai";
 				//echo $sql;
@@ -236,9 +236,9 @@
 
 					$tot = 0;
 					foreach ($data_kompetensi as $key => $value) {
-						$nil = ($row[$value['nama_kompetensi']]/$value['jml'])*100; 
+						$nil = ($row[$value['nama_kelpenilaian']]/$value['jml'])*100; 
 						echo "<td class='txt_right'>".number_format($nil,2)."</td>";
-						$tot += $nil * ($value['bobot_kompetensi']/100);
+						$tot += $nil * ($value['bobot_kelpenilaian']/100);
 					}
 
 					if($row['level']==2 || $row['level']==3){

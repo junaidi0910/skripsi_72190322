@@ -72,7 +72,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col">
-			<h3>Data Master Isi Kompetensi</h3>
+			<h3>Data Master isi penilaian</h3>
 		</div>
 	</div>
 	<hr class="bg-primary" width="100%">
@@ -87,14 +87,14 @@
 				$btn = "Tambah"; 
 				if(isset($_GET['ubah'])){
 					$id_isi = isset($_GET['id_isi'])?mysql_real_escape_string(htmlspecialchars($_GET['id_isi'])):"";
-					$sql = "SELECT * FROM isi_kompetensi WHERE id_isi = $id_isi";
+					$sql = "SELECT * FROM isi_penilaian WHERE id_isi = $id_isi";
 					$q = mysql_query($sql);
 					$data = [];
 					while ($row = mysql_fetch_assoc($q)) {
 						$id_isi = $row['id_isi']; 
-						$id_kompetensi = $row['id_kompetensi']; 
-						// $$row['id_kompetensi'] = $row['id_kompetensi']; 
-						$isi_kompetensi = $row['isi_kompetensi'];
+						$id_kelpenilaian = $row['id_kelpenilaian']; 
+						// $$row['id_kelpenilaian'] = $row['id_kelpenilaian']; 
+						$isi_penilaian = $row['isi_penilaian'];
 						$btn = "Ubah"; 
 					}
 
@@ -123,17 +123,17 @@
 				      	</div>
 				     	<div class="modal-body">
 				      	<!-- form -->
-					       	<form class="form-horizontal" method="post" action="modal/p_isi_kompetensi.php">
+					       	<form class="form-horizontal" method="post" action="modal/p_isi_penilaian.php">
 					       		<input type="hidden" id="id_isi" name="id_isi" value="<?= isset($id_isi)?$id_isi:""; ?>" >
 					       	 	<div class="form-group row">
-								   	<label for="id_kompetensi" class="col-sm-3 col-form-label col-form-label-sm">Jenis Kompetensi</label>
+								   	<label for="id_kelpenilaian" class="col-sm-3 col-form-label col-form-label-sm">Kelompok Penilaian</label>
 								    <div class="col-sm-9">
-							          	<select class="form-control form-control-sm" id="id_kompetensi" name="id_kompetensi">
+							          	<select class="form-control form-control-sm" id="id_kelpenilaian" name="id_kelpenilaian">
 							          		<?php
-							          			$jb = mysql_query("SELECT * FROM jenis_kompetensi");
+							          			$jb = mysql_query("SELECT * FROM kelompok_penilaian");
 							          			while($rj = mysql_fetch_array($jb)){
 							          		?>
-									      	<option value="<?= $rj['id_kompetensi']?>" <?= $rj['id_kompetensi'] == $id_kompetensi ?"selected":''?> ><?= $rj['nama_kompetensi']; ?></option>
+									      	<option value="<?= $rj['id_kelpenilaian']?>" <?= $rj['id_kelpenilaian'] == $id_kelpenilaian ?"selected":''?> ><?= $rj['nama_kelpenilaian']; ?></option>
 									   		<?php } ?>
 									   	</select>
 							    	</div>
@@ -141,9 +141,9 @@
 								
 
 								<div class="form-group row">
-									<label for="isi_kompetensi" class="col-sm-3 control-form-label col-form-label-sm">Isi Kompetensi</label>
+									<label for="isi_penilaian" class="col-sm-3 control-form-label col-form-label-sm">isi penilaian</label>
 									<div class="col-sm-9">
-										<textarea class="form-control form-control-sm" id="isi_kompetensi" name="isi_kompetensi" placeholder="Isi Kompetensi" rows="10"><?= isset($isi_kompetensi)?$isi_kompetensi:""; ?></textarea>
+										<textarea class="form-control form-control-sm" id="isi_penilaian" name="isi_penilaian" placeholder="isi penilaian" rows="10"><?= isset($isi_penilaian)?$isi_penilaian:""; ?></textarea>
 									</div>
 								</div>
 								<div class="form-group row">
@@ -173,29 +173,29 @@
 	<div class="container">
 		<div class="row">
 			<div class="col">
-			<input type="search" class="form-control" data-table="order-table" placeholder="Cari Data User" />
+			<input type="search" class="form-control" data-table="order-table" placeholder="Cari Data Isi Penilaian" />
 			<hr>
 				<table class="order-table dataTable" width="100%">
 					<thead>
 						<tr>
 							<th width="10%">No</th>
-							<th width="20%">Jenis Kompetensi</th>
-							<th width="25%">Isi Kompetensi</th>
+							<th width="20%">Kelompok Penilaian</th>
+							<th width="25%">isi penilaian</th>
 							<th>Penilai</th>
 							<th width="25%">Aksi</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php
-							$sql = "SELECT * FROM isi_kompetensi a JOIN jenis_kompetensi b ON a.id_kompetensi = b.id_kompetensi ORDER BY b.id_kompetensi ASC";
+							$sql = "SELECT * FROM isi_penilaian a JOIN kelompok_penilaian b ON a.id_kelpenilaian = b.id_kelpenilaian ORDER BY b.id_kelpenilaian ASC";
 							$q = mysql_query($sql);
 							$i=0;
 							while($row = mysql_fetch_array($q)){
 						?>
 						<tr>
 							<td><?= ++$i; ?></td>
-							<td><?= $row['nama_kompetensi']; ?></td>
-							<td><?= $row['isi_kompetensi']; ?></td>
+							<td><?= $row['nama_kelpenilaian']; ?></td>
+							<td><?= $row['isi_penilaian']; ?></td>
 							<td><?php 
 								$a = ['Atasan', 'Rekan Kerja', 'Diri Sendiri'];
 								$ret = '';
@@ -227,7 +227,7 @@
   	<div class="modal-dialog modal-lg">
     	<div class="modal-content">
 	      	<div class="modal-header">
-		   	 	<h5 class="modal-title" id="exampleModalLabel">Data Isi Kompetensi</h5>
+		   	 	<h5 class="modal-title" id="exampleModalLabel">Data isi penilaian</h5>
 		      	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		        	<span aria-hidden="true">&times;</span>
 		      	</button>
@@ -235,14 +235,14 @@
 		    <div class="modal-body">
 		     	<table class="table">
 		     		<tr>
-		     			<th width="30%">Jenis Kompetensi</th>
+		     			<th width="30%">Kelompok Penilaian</th>
 		     			<td width="5%"> : </td>
-		     			<td id="td_jenis_kompetensi">  Sekolah </td>
+		     			<td id="td_kelompok_penilaian">  Sekolah </td>
 		     		</tr>
 		     		<tr>
-		     			<th>Isi Kompetensi</th>
+		     			<th>isi penilaian</th>
 		     			<td> : </td>
-		     			<td  id="td_isi_kompetensi">  </td>
+		     			<td  id="td_isi_penilaian">  </td>
 		     		</tr>
 		     	</table>
 			</div>
@@ -254,10 +254,10 @@
   	<div class="modal-dialog modal-md">
     	<div class="modal-content">
       		<div class="modal-header">
-		   	 	<h5 class="modal-title" id="exampleModalLabel">Hapus Data Isi Kompetensi</h5>
+		   	 	<h5 class="modal-title" id="exampleModalLabel">Hapus Data isi penilaian</h5>
 		      	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		        	<span aria-hidden="true">&times;</span>
-		        	<form method="post" action="modal/p_isi_kompetensi.php">
+		        	<form method="post" action="modal/p_isi_penilaian.php">
 		        		
 		        	<input type="hidden" name="id_delete" id="id_delete">
 		      	</button>
@@ -275,13 +275,13 @@
     $(document).ready(function(){
 		$(".btn_info").click(function(){
 			var id = $(this).attr("id");
-			var _url = "modal/p_isi_kompetensi.php?id_isi="+id;
+			var _url = "modal/p_isi_penilaian.php?id_isi="+id;
 			$.ajax({
 				url: _url, 
 				success: function(result){
 			  		var res = JSON.parse(result);
-			  		$("#td_jenis_kompetensi").html(res.nama_kompetensi);
-			  		$("#td_isi_kompetensi").html(res.isi_kompetensi);
+			  		$("#td_kelompok_penilaian").html(res.nama_kelpenilaian);
+			  		$("#td_isi_penilaian").html(res.isi_penilaian);
 			  	}
 			});
 			$('.infolengkap').modal('show');

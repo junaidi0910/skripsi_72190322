@@ -152,7 +152,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col">
-			<input type="search" class="form-control" data-table="order-table" placeholder="Cari Data User" />
+			<input type="search" class="form-control" data-table="order-table" placeholder="Cari Jenis User" />
 			<hr>
 				<table class="order-table dataTable" width="100%">
 					<thead>

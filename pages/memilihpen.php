@@ -136,7 +136,7 @@
 			                    </div>
 			           	 	</div>
 				      		<div class="form-group row">
-			                	<span class="label-text col-md-6 col-form-label text-md-left">PA/PPA Penilai 1</span>
+			                	<span class="label-text col-md-6 col-form-label text-md-left">Pejabat Penilai</span>
 			                    <div class="col-md-6">
 			                        <select name="guru_1" id="cb_guru_dinilai_1" class="form-control" required>
 			                            
@@ -183,7 +183,7 @@
 						<tr>
 							<th width="10%">No</th>
 							<th width="30%">PA/PPA Dinilai</th>
-							<th width="30%">PA/PPA Penilai</th>
+							<th width="30%">Pejabat dan PA/PPA Penilai</th>
 							<th width="30%">Aksi</th>
 						</tr>
 					</thead>

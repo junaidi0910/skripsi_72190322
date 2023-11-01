@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 30, 2023 at 08:21 AM
+-- Generation Time: Nov 01, 2023 at 11:58 AM
 -- Server version: 10.1.28-MariaDB
 -- PHP Version: 7.1.11
 
@@ -25,50 +25,33 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `isi_kompetensi`
+-- Table structure for table `isi_penilaian`
 --
 
-CREATE TABLE `isi_kompetensi` (
+CREATE TABLE `isi_penilaian` (
   `id_isi` int(11) NOT NULL,
-  `id_kompetensi` int(11) DEFAULT NULL,
-  `isi_kompetensi` text,
+  `id_kelpenilaian` int(11) DEFAULT NULL,
+  `isi_penilaian` text,
   `ket` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `isi_kompetensi`
+-- Dumping data for table `isi_penilaian`
 --
 
-INSERT INTO `isi_kompetensi` (`id_isi`, `id_kompetensi`, `isi_kompetensi`, `ket`) VALUES
-(3, 9, 'Ketaatan', '0,1,2'),
-(4, 9, 'Tanggung Jawab', '0,1,2'),
-(5, 9, 'Kesetiaan', '0,1,2'),
-(6, 9, 'Kejujuran', '0,1,2'),
-(7, 10, 'Sikap Kerja (Kerja sama)', '0,1,2'),
-(8, 10, 'Prakarsa', '0,1,2'),
-(9, 10, 'Prestasi', '0,1,2'),
-(10, 10, 'Pengabdian Masyarakat', '0,1,2'),
-(11, 10, 'Intelektualitas', '0,1,2');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `jenis_kompetensi`
---
-
-CREATE TABLE `jenis_kompetensi` (
-  `id_kompetensi` int(11) NOT NULL,
-  `nama_kompetensi` varchar(50) DEFAULT '0',
-  `bobot_kompetensi` int(11) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `jenis_kompetensi`
---
-
-INSERT INTO `jenis_kompetensi` (`id_kompetensi`, `nama_kompetensi`, `bobot_kompetensi`) VALUES
-(9, 'Kedisplinan', 50),
-(10, 'Kapabilitas', 50);
+INSERT INTO `isi_penilaian` (`id_isi`, `id_kelpenilaian`, `isi_penilaian`, `ket`) VALUES
+(3, 9, 'Ketaatan', '0'),
+(4, 9, 'Tanggung Jawab', '0'),
+(5, 9, 'Kesetiaan', '0'),
+(6, 9, 'Kejujuran', '0'),
+(7, 10, 'Sikap Kerja (Kerja sama)', '0'),
+(8, 10, 'Prakarsa', '0'),
+(9, 10, 'Prestasi', '0'),
+(10, 10, 'Pengabdian Masyarakat', '0'),
+(11, 12, 'nilai 1', '1'),
+(12, 12, 'nilai 2', '1'),
+(13, 12, 'nilai 3', '1'),
+(14, 12, 'nilai 4', '1');
 
 -- --------------------------------------------------------
 
@@ -78,7 +61,7 @@ INSERT INTO `jenis_kompetensi` (`id_kompetensi`, `nama_kompetensi`, `bobot_kompe
 
 CREATE TABLE `jenis_user` (
   `id_jenis_user` int(10) NOT NULL,
-  `jabatan` varchar(20) DEFAULT NULL,
+  `jabatan` varchar(40) DEFAULT NULL,
   `level` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -90,7 +73,27 @@ INSERT INTO `jenis_user` (`id_jenis_user`, `jabatan`, `level`) VALUES
 (4, 'Pejabat Penilai', 2),
 (5, 'PA/PPA', 1),
 (7, 'Admin PSDM', 0),
-(8, 'Atasan Pejabat Penil', 3);
+(8, 'Atasan Pejabat Penilai', 3);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kelompok_penilaian`
+--
+
+CREATE TABLE `kelompok_penilaian` (
+  `id_kelpenilaian` int(11) NOT NULL,
+  `nama_kelpenilaian` varchar(50) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `kelompok_penilaian`
+--
+
+INSERT INTO `kelompok_penilaian` (`id_kelpenilaian`, `nama_kelpenilaian`) VALUES
+(9, 'Kedisplinan'),
+(10, 'Kapabilitas'),
+(12, 'Rekan Kerja');
 
 -- --------------------------------------------------------
 
@@ -111,7 +114,8 @@ CREATE TABLE `penilai` (
 INSERT INTO `penilai` (`id_penilai`, `nip`, `id_periode`) VALUES
 (2, '2012091200113511', 4),
 (3, '72190322', 4),
-(4, '72190377', 4);
+(4, '72190377', 4),
+(6, '72190678', 4);
 
 -- --------------------------------------------------------
 
@@ -178,7 +182,20 @@ INSERT INTO `penilaian` (`id_nilai`, `id_penilai_detail`, `id_isi`, `hasil_nilai
 (53, 18, 7, 92),
 (54, 18, 8, 92),
 (55, 18, 9, 92),
-(56, 18, 10, 92);
+(56, 18, 10, 92),
+(59, 34, 3, 80),
+(60, 34, 4, 80),
+(61, 34, 5, 80),
+(62, 34, 6, 80),
+(63, 34, 7, 80),
+(64, 34, 8, 80),
+(65, 34, 9, 80),
+(66, 34, 10, 80),
+(67, 34, 11, 80),
+(68, 15, 11, 100),
+(69, 15, 12, 100),
+(70, 15, 13, 100),
+(71, 15, 14, 100);
 
 -- --------------------------------------------------------
 
@@ -213,7 +230,13 @@ INSERT INTO `penilai_detail` (`id_penilai_detail`, `id_penilai`, `nip`) VALUES
 (21, 4, '72190456'),
 (22, 4, '2012091200113599'),
 (23, 4, '2012091200113501'),
-(24, 4, '72190377');
+(24, 4, '72190377'),
+(31, 6, '2012091200113511'),
+(32, 6, '72190322'),
+(33, 6, '72190377'),
+(34, 6, '2012091200113599'),
+(35, 6, '2012091200113501'),
+(36, 6, '72190678');
 
 -- --------------------------------------------------------
 
@@ -225,19 +248,18 @@ CREATE TABLE `periode` (
   `id_periode` int(11) NOT NULL,
   `tahun_ajar` varchar(50) NOT NULL,
   `semester` varchar(50) NOT NULL,
-  `status_periode` int(11) NOT NULL,
-  `setting` varchar(50) NOT NULL
+  `status_periode` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `periode`
 --
 
-INSERT INTO `periode` (`id_periode`, `tahun_ajar`, `semester`, `status_periode`, `setting`) VALUES
-(1, '2018', 'Ganjil', 0, '50;25;25'),
-(2, '2018', 'Genap', 0, '50;30;20'),
-(3, '2019', 'Ganjil', 0, '50;30;20'),
-(4, '2023', 'Genap', 1, '40;40;20');
+INSERT INTO `periode` (`id_periode`, `tahun_ajar`, `semester`, `status_periode`) VALUES
+(1, '2018', 'Ganjil', 0),
+(2, '2018', 'Genap', 0),
+(3, '2019', 'Ganjil', 0),
+(4, '2023', 'Genap', 1);
 
 -- --------------------------------------------------------
 
@@ -281,23 +303,23 @@ INSERT INTO `user` (`nip`, `id_jenis_user`, `password`, `nama_ppa`, `golongan`, 
 --
 
 --
--- Indexes for table `isi_kompetensi`
+-- Indexes for table `isi_penilaian`
 --
-ALTER TABLE `isi_kompetensi`
+ALTER TABLE `isi_penilaian`
   ADD PRIMARY KEY (`id_isi`),
-  ADD KEY `id_kompetensi` (`id_kompetensi`);
-
---
--- Indexes for table `jenis_kompetensi`
---
-ALTER TABLE `jenis_kompetensi`
-  ADD PRIMARY KEY (`id_kompetensi`);
+  ADD KEY `id_kompetensi` (`id_kelpenilaian`);
 
 --
 -- Indexes for table `jenis_user`
 --
 ALTER TABLE `jenis_user`
   ADD PRIMARY KEY (`id_jenis_user`);
+
+--
+-- Indexes for table `kelompok_penilaian`
+--
+ALTER TABLE `kelompok_penilaian`
+  ADD PRIMARY KEY (`id_kelpenilaian`);
 
 --
 -- Indexes for table `penilai`
@@ -341,16 +363,10 @@ ALTER TABLE `user`
 --
 
 --
--- AUTO_INCREMENT for table `isi_kompetensi`
+-- AUTO_INCREMENT for table `isi_penilaian`
 --
-ALTER TABLE `isi_kompetensi`
-  MODIFY `id_isi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
---
--- AUTO_INCREMENT for table `jenis_kompetensi`
---
-ALTER TABLE `jenis_kompetensi`
-  MODIFY `id_kompetensi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+ALTER TABLE `isi_penilaian`
+  MODIFY `id_isi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `jenis_user`
@@ -359,22 +375,28 @@ ALTER TABLE `jenis_user`
   MODIFY `id_jenis_user` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT for table `kelompok_penilaian`
+--
+ALTER TABLE `kelompok_penilaian`
+  MODIFY `id_kelpenilaian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
 -- AUTO_INCREMENT for table `penilai`
 --
 ALTER TABLE `penilai`
-  MODIFY `id_penilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_penilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `penilaian`
 --
 ALTER TABLE `penilaian`
-  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `penilai_detail`
 --
 ALTER TABLE `penilai_detail`
-  MODIFY `id_penilai_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_penilai_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `periode`
@@ -387,10 +409,10 @@ ALTER TABLE `periode`
 --
 
 --
--- Constraints for table `isi_kompetensi`
+-- Constraints for table `isi_penilaian`
 --
-ALTER TABLE `isi_kompetensi`
-  ADD CONSTRAINT `FK_isi_kompetensi_jenis_kompetensi` FOREIGN KEY (`id_kompetensi`) REFERENCES `jenis_kompetensi` (`id_kompetensi`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `isi_penilaian`
+  ADD CONSTRAINT `FK_isi_kompetensi_jenis_kompetensi` FOREIGN KEY (`id_kelpenilaian`) REFERENCES `kelompok_penilaian` (`id_kelpenilaian`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `penilai`
@@ -403,7 +425,7 @@ ALTER TABLE `penilai`
 -- Constraints for table `penilaian`
 --
 ALTER TABLE `penilaian`
-  ADD CONSTRAINT `FK_penilaian_isi_kompetensi` FOREIGN KEY (`id_isi`) REFERENCES `isi_kompetensi` (`id_isi`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_penilaian_isi_kompetensi` FOREIGN KEY (`id_isi`) REFERENCES `isi_penilaian` (`id_isi`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `FK_penilaian_penilai_detail` FOREIGN KEY (`id_penilai_detail`) REFERENCES `penilai_detail` (`id_penilai_detail`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --

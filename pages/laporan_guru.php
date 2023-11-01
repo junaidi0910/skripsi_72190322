@@ -7,11 +7,11 @@
 			$nip_user = $_SESSION[md5('user')];//'2012091200113504';
 			
 
-			$sql = "SELECT * FROM jenis_kompetensi";
+			$sql = "SELECT * FROM kelompok_penilaian";
 			$q = mysql_query($sql);
 			
 			while($row = mysql_fetch_array($q)){
-				${"b_".$row['nama_kompetensi']} = $row['bobot_kompetensi'];
+				${"b_".$row['nama_kelpenilaian']} = $row['bobot_kelpenilaian'];
 			}
 
 			$sql = "SELECT * FROM penilai a JOIN penilai_detail b ON a.id_penilai = b.id_penilai WHERE a.nip = '$nip_user' ";
@@ -32,10 +32,10 @@
 						tbnilai.penilai,
 						tbnilai.level,
 						tbnilai.jabatan,
-						SUM( IF(tbnilai.nama_kompetensi = 'Pedagogik', tbnilai.nilai, 0) ) AS 'Pedagogik',
-						SUM( IF(tbnilai.nama_kompetensi = 'Kepribadian', tbnilai.nilai, 0) ) AS 'Kepribadian',
-						SUM( IF(tbnilai.nama_kompetensi = 'Sosial', tbnilai.nilai, 0) ) AS 'Sosial',
-						SUM( IF(tbnilai.nama_kompetensi = 'Profesional', tbnilai.nilai, 0) ) AS 'Profesional'
+						SUM( IF(tbnilai.nama_kelpenilaian = 'Pedagogik', tbnilai.nilai, 0) ) AS 'Pedagogik',
+						SUM( IF(tbnilai.nama_kelpenilaian = 'Kepribadian', tbnilai.nilai, 0) ) AS 'Kepribadian',
+						SUM( IF(tbnilai.nama_kelpenilaian = 'Sosial', tbnilai.nilai, 0) ) AS 'Sosial',
+						SUM( IF(tbnilai.nama_kelpenilaian = 'Profesional', tbnilai.nilai, 0) ) AS 'Profesional'
 					FROM 
 					(SELECT 
 						a.id_nilai, 
@@ -45,19 +45,19 @@
 						e.nama_ppa as 'penilai',
 						f.jabatan,
 						f.level,
-						c.id_kompetensi,
-						c.nama_kompetensi,
-						c.bobot_kompetensi,
+						c.id_kelpenilaian,
+						c.nama_kelpenilaian,
+						c.bobot_kelpenilaian,
 						SUM(a.hasil_nilai) as nilai
 					FROM penilaian a 
-					JOIN isi_kompetensi b ON a.id_isi = b.id_isi
-					JOIN jenis_kompetensi c ON b.id_kompetensi = c.id_kompetensi
+					JOIN isi_penilaian b ON a.id_isi = b.id_isi
+					JOIN kelompok_penilaian c ON b.id_kelpenilaian = c.id_kelpenilaian
 					JOIN (penilai_detail d JOIN user e ON d.nip = e.nip JOIN jenis_user f ON f.id_jenis_user = e.id_jenis_user) ON d.id_penilai_detail = a.id_penilai_detail 
 					JOIN (penilai g JOIN user h ON g.nip = h.nip ) ON d.id_penilai = g.id_penilai
 					WHERE 
 					a.id_penilai_detail IN ($id_penilai_detail) 
 					AND g.id_periode = $id_periode
-					GROUP BY a.id_penilai_detail, c.id_kompetensi
+					GROUP BY a.id_penilai_detail, c.id_kelpenilaian
 					ORDER BY 4) as tbnilai
 					GROUP BY tbnilai.penilai";
 			//echo $sql;

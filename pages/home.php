@@ -40,7 +40,7 @@ $sql = "SELECT
 											JOIN penilai_detail pd ON p.id_penilai = pd.id_penilai
 											WHERE p.nip = d.nip)
 											*
-											(SELECT COUNT(*) FROM isi_kompetensi)
+											(SELECT COUNT(*) FROM isi_penilaian)
 										) as tot
 										FROM dual
 									)
@@ -86,7 +86,7 @@ $sql = "SELECT
 											JOIN penilai_detail pd ON p.id_penilai = pd.id_penilai
 											WHERE p.nip = d.nip)
 											*
-											(SELECT COUNT(*) FROM isi_kompetensi)
+											(SELECT COUNT(*) FROM isi_penilaian)
 										) as tot
 										FROM dual
 									)

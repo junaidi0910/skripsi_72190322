@@ -71,7 +71,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col">
-			<h3>Data Master Jenis Kompetensi</h3>
+			<h3>Data Master Kelompok Penilaian</h3>
 		</div>
 	</div>
 	<hr class="bg-primary" width="100%">
@@ -84,14 +84,14 @@
 			<?php 
 				$btn = "Tambah"; 
 				if(isset($_GET['ubah'])){
-					$id_kompetensi = isset($_GET['id_kompetensi'])?mysql_real_escape_string(htmlspecialchars($_GET['id_kompetensi'])):"";
-					$sql = "SELECT * FROM jenis_kompetensi WHERE id_kompetensi = $id_kompetensi";
+					$id_kelpenilaian = isset($_GET['id_kelpenilaian'])?mysql_real_escape_string(htmlspecialchars($_GET['id_kelpenilaian'])):"";
+					$sql = "SELECT * FROM kelompok_penilaian WHERE id_kelpenilaian = $id_kelpenilaian";
 					$q = mysql_query($sql);
 					$data = [];
 					while ($row = mysql_fetch_assoc($q)) {
-						$id_kompetensi = $row['id_kompetensi']; 
-						$nama_kompetensi = $row['nama_kompetensi']; 
-						$bobot_kompetensi = $row['bobot_kompetensi'];
+						$id_kelpenilaian = $row['id_kelpenilaian']; 
+						$nama_kelpenilaian = $row['nama_kelpenilaian']; 
+						$bobot_kelpenilaian = $row['bobot_kelpenilaian'];
 						$btn = "Ubah"; 
 					}
 
@@ -113,26 +113,26 @@
 			  	<div class="modal-dialog" role="document">
 				    <div class="modal-content">
 				     	<div class="modal-header">
-					        <h5 class="modal-title" id="exampleModalLabel">Data Jenis Kompetensi</h5>
+					        <h5 class="modal-title" id="exampleModalLabel">Data Kelompok Penilaian</h5>
 					        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					          	<span aria-hidden="true">&times;</span>
 					        </button>
 				      	</div>
 				      	<div class="modal-body">
 			       			<!-- form -->
-					       	<form class="form-horizontal" method="post" action="modal/p_jenis_kompetensi.php">
-			       			<input type="hidden" id="id_kompetensi" name="id_kompetensi" <?= isset($id_kompetensi)?'value="'.$id_kompetensi.'" readonly':""; ?> >
+					       	<form class="form-horizontal" method="post" action="modal/p_kelompok_penilaian.php">
+			       			<input type="hidden" id="id_kelpenilaian" name="id_kelpenilaian" <?= isset($id_kelpenilaian)?'value="'.$id_kelpenilaian.'" readonly':""; ?> >
 						  	<div class="form-group row">
-								<label for="nama_kompetensi" class="col-sm-4 col-form-label col-form-label-sm">Jenis Kompetensi</label>
+								<label for="nama_kelpenilaian" class="col-sm-4 col-form-label col-form-label-sm">Kelompok Penilaian</label>
 								<div class="col-sm-8">
-									<input type="text" class="form-control" id="nama_kompetensi" name="nama_kompetensi" value="<?= isset($nama_kompetensi)?$nama_kompetensi:""; ?>" placeholder="Nama Kompetensi">
+									<input type="text" class="form-control" id="nama_kelpenilaian" name="nama_kelpenilaian" value="<?= isset($nama_kelpenilaian)?$nama_kelpenilaian:""; ?>" placeholder="Nama Kelompok Penilaian">
 								</div>
 							</div>
 
 							<div class="form-group row">
-								<label for="bobot_kompetensi" class="col-sm-4 col-form-label col-form-label-sm">Bobot Kompetensi</label>
+								<label for="bobot_kelpenilaian" class="col-sm-4 col-form-label col-form-label-sm">Bobot Penilaian</label>
 								<div class="col-sm-8">
-									<input type="number" class="form-control" id="bobot_kompetensi" name="bobot_kompetensi" value="<?= isset($bobot_kompetensi)?$bobot_kompetensi:""; ?>" placeholder="Bobot Kompetensi">
+									<input type="number" class="form-control" id="bobot_kelpenilaian" name="bobot_kelpenilaian" value="<?= isset($bobot_kelpenilaian)?$bobot_kelpenilaian:""; ?>" placeholder="Bobot Penilaian">
 								</div>
 							</div>
 				      	</div>
@@ -150,32 +150,32 @@
 	<div class="container">
 		<div class="row">
 			<div class="col">
-				<input type="search" class="form-control" data-table="order-table" placeholder="Cari Data Jenis Kompetensi" />
+				<input type="search" class="form-control" data-table="order-table" placeholder="Cari Data Kelompok Penilaian" />
 				<hr>
 				<table class="order-table">
 					<thead>
 						<tr>
 							<th width="10%">No</th>
-							<th width="45%">Jenis Kompetensi</th>
+							<th width="45%">Kelompok Penilaian</th>
 							<th width="15%">Bobot (%)</th>
 							<th width="30%">Aksi</th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php
-							$sql = "SELECT * FROM jenis_kompetensi";
+							$sql = "SELECT * FROM kelompok_penilaian";
 							$q = mysql_query($sql);
 							$i=0;
 							while($row = mysql_fetch_array($q)){
 						?>
 						<tr>
 							<td><?= ++$i; ?></td>
-							<td><?= $row['nama_kompetensi']; ?></td>
-							<td><?= $row['bobot_kompetensi']; ?></td>
+							<td><?= $row['nama_kelpenilaian']; ?></td>
+							<td><?= $row['bobot_kelpenilaian']; ?></td>
 							<td>
-								<button class="btn btn-outline-info btn-sm btn_info" id="<?= $row['id_kompetensi'];?>"><span data-feather="info"></span></button>
-								<a href="index.php?p=mjeniskom&ubah=true&id_kompetensi=<?= $row['id_kompetensi'];?>" class="btn btn-outline-warning btn-sm" id="<?= $row['id_kompetensi'];?>"><span data-feather="edit"></span></a>
-								<button href="#" class="btn btn-outline-danger btn-sm btn_hapus" id="<?= $row['id_kompetensi'];?>"><span data-feather="trash-2"></span></button>
+								<button class="btn btn-outline-info btn-sm btn_info" id="<?= $row['id_kelpenilaian'];?>"><span data-feather="info"></span></button>
+								<a href="index.php?p=mjeniskom&ubah=true&id_kelpenilaian=<?= $row['id_kelpenilaian'];?>" class="btn btn-outline-warning btn-sm" id="<?= $row['id_kelpenilaian'];?>"><span data-feather="edit"></span></a>
+								<button href="#" class="btn btn-outline-danger btn-sm btn_hapus" id="<?= $row['id_kelpenilaian'];?>"><span data-feather="trash-2"></span></button>
 							</td>
 						</tr>
 						<?php } ?>
@@ -191,7 +191,7 @@
   	<div class="modal-dialog modal-md">
     	<div class="modal-content">
 	      	<div class="modal-header">
-		   	 	<h5 class="modal-title" id="exampleModalLabel">Data Jenis Kompetensi</h5>
+		   	 	<h5 class="modal-title" id="exampleModalLabel">Data Kelompok Penilaian</h5>
 		      	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		        	<span aria-hidden="true">&times;</span>
 		      	</button>
@@ -199,9 +199,9 @@
 		    <div class="modal-body">
 		     	<table class="table">
 		     		<tr>
-		     			<th width="30%">Jenis Kompetensi</th>
+		     			<th width="30%">Kelompok Penilaian</th>
 		     			<td width="5%"> : </td>
-		     			<td id="td_jenis_kompetensi">  </td>
+		     			<td id="td_kelompok_penilaian">  </td>
 		     		</tr>
 		     		<tr>
 		     			<th>Bobot</th>
@@ -218,10 +218,10 @@
   	<div class="modal-dialog modal-md">
     	<div class="modal-content">
       		<div class="modal-header">
-		   	 	<h5 class="modal-title" id="exampleModalLabel">Hapus Data Jenis Kompetensi</h5>
+		   	 	<h5 class="modal-title" id="exampleModalLabel">Hapus Data Kelompok Penilaian</h5>
 		      	<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		        	<span aria-hidden="true">&times;</span>
-		        	<form method="post" action="modal/p_jenis_kompetensi.php">
+		        	<form method="post" action="modal/p_kelompok_penilaian.php">
 		        		
 		        	<input type="hidden" name="id_delete" id="id_delete">
 		      	</button>
@@ -239,14 +239,14 @@
     $(document).ready(function(){
 		$(".btn_info").click(function(){
 			var id = $(this).attr("id");
-			var _url = "modal/p_jenis_kompetensi.php?id_kompetensi="+id;
+			var _url = "modal/p_kelompok_penilaian.php?id_kelpenilaian="+id;
 			$.ajax({
 				url: _url, 
 				success: function(result){
 			  		var res = JSON.parse(result);
 			  		console.log(res);
-			  		$("#td_jenis_kompetensi").html(res.nama_kompetensi);
-			  		$("#td_bobot").html(res.bobot_kompetensi);
+			  		$("#td_kelompok_penilaian").html(res.nama_kelpenilaian);
+			  		$("#td_bobot").html(res.bobot_kelpenilaian);
 			  	}
 			});
 			$('.infolengkap').modal('show');
@@ -259,14 +259,14 @@
 		});
 
 		$('#exampleModal').on('shown.bs.modal', function () {
-			var _url = "modal/p_jenis_kompetensi.php?sum";
+			var _url = "modal/p_kelompok_penilaian.php?sum";
 			$.ajax({
 				url: _url, 
 				success: function(result){
 					var sum = result;
 					var max = 100-sum;
 					console.log(max);
-					$("#bobot_kompetensi").attr("max", max);
+					$("#bobot_kelpenilaian").attr("max", max);
 			  	}
 			});
 		});
