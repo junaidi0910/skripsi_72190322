@@ -91,7 +91,6 @@
 					while ($row = mysql_fetch_assoc($q)) {
 						$id_kelpenilaian = $row['id_kelpenilaian']; 
 						$nama_kelpenilaian = $row['nama_kelpenilaian']; 
-						$bobot_kelpenilaian = $row['bobot_kelpenilaian'];
 						$btn = "Ubah"; 
 					}
 
@@ -128,13 +127,6 @@
 									<input type="text" class="form-control" id="nama_kelpenilaian" name="nama_kelpenilaian" value="<?= isset($nama_kelpenilaian)?$nama_kelpenilaian:""; ?>" placeholder="Nama Kelompok Penilaian">
 								</div>
 							</div>
-
-							<div class="form-group row">
-								<label for="bobot_kelpenilaian" class="col-sm-4 col-form-label col-form-label-sm">Bobot Penilaian</label>
-								<div class="col-sm-8">
-									<input type="number" class="form-control" id="bobot_kelpenilaian" name="bobot_kelpenilaian" value="<?= isset($bobot_kelpenilaian)?$bobot_kelpenilaian:""; ?>" placeholder="Bobot Penilaian">
-								</div>
-							</div>
 				      	</div>
 				      	<div class="modal-footer">
 				        	<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -156,8 +148,7 @@
 					<thead>
 						<tr>
 							<th width="10%">No</th>
-							<th width="45%">Kelompok Penilaian</th>
-							<th width="15%">Bobot (%)</th>
+							<th width="60%">Kelompok Penilaian</th>
 							<th width="30%">Aksi</th>
 						</tr>
 					</thead>
@@ -171,7 +162,6 @@
 						<tr>
 							<td><?= ++$i; ?></td>
 							<td><?= $row['nama_kelpenilaian']; ?></td>
-							<td><?= $row['bobot_kelpenilaian']; ?></td>
 							<td>
 								<button class="btn btn-outline-info btn-sm btn_info" id="<?= $row['id_kelpenilaian'];?>"><span data-feather="info"></span></button>
 								<a href="index.php?p=mjeniskom&ubah=true&id_kelpenilaian=<?= $row['id_kelpenilaian'];?>" class="btn btn-outline-warning btn-sm" id="<?= $row['id_kelpenilaian'];?>"><span data-feather="edit"></span></a>

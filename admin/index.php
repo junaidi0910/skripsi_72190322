@@ -96,7 +96,7 @@
               <li class="nav-item">
                 <a class="nav-link" href="index.php?p=misikom">
                   <span data-feather="file"></span>
-                  Isi Penilaian
+                  Isi Kompetensi
                 </a>
               </li>
               <li class="nav-item">

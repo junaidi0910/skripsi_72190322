@@ -95,7 +95,7 @@
 				      		$i=0;
 				      		$sql_guru = "SELECT * FROM user a JOIN jenis_user b ON a.id_jenis_user = b.id_jenis_user WHERE b.level = 1 AND (SELECT COUNT(*) FROM penilai c WHERE c.nip = a.nip ) = 0";
 				      		$q = mysql_query($sql_guru);
-				      		echo 'var data_guru = [';
+				      		echo 'var data_dinilai = [';
 				      		while($row = mysql_fetch_array($q)){
 				      			if($i!=0){
 				      				echo ",";
@@ -108,9 +108,23 @@
 				      		echo '];';
 
 				      		$i=0;
-				      		$sql_guru = "SELECT * FROM user a JOIN jenis_user b ON a.id_jenis_user = b.id_jenis_user WHERE b.LEVEL = 1 AND (SELECT COUNT(*) FROM penilai_detail c WHERE c.nip = a.nip)<5";
+				      		$sql_guru = "SELECT * FROM user a JOIN jenis_user b ON a.id_jenis_user = b.id_jenis_user WHERE b.LEVEL = 2 ";
 				      		$q = mysql_query($sql_guru);
-				      		echo 'var data_guru_pen2 = [';
+				      		echo 'var data_penilai_pejabat = [';
+				      		while($row = mysql_fetch_array($q)){
+				      			if($i!=0){
+				      				echo ",";
+				      			}
+				      			echo '{ nip : "'.$row['nip'].'", ';
+				      			echo ' nama : "'.$row['nama_ppa'].'"}';
+				      			
+				      			$i++;
+				      		}
+				      		echo '];';
+				      		$i=0;
+				      		$sql_guru = "SELECT * FROM user a JOIN jenis_user b ON a.id_jenis_user = b.id_jenis_user WHERE b.LEVEL = 1";
+				      		$q = mysql_query($sql_guru);
+				      		echo 'var data_penilai_pa = [';
 				      		while($row = mysql_fetch_array($q)){
 				      			if($i!=0){
 				      				echo ",";
@@ -130,31 +144,47 @@
 				      		<div class="form-group row">
 			                	<span class="label-text col-md-6 col-form-label text-md-left">PA/PPA Dinilai</span>
 			                    <div class="col-md-6">
-			                        <select name="penilai" id="cb_guru_penilai" class="form-control" required>
+			                        <select name="dinilai" id="select_dinilai" class="form-control" placeholderrequired>
 			                            
 			                        </select>
 			                    </div>
 			           	 	</div>
-				      		<div class="form-group row">
+				      		<div class="form-group row" id="fg_pejabat">
 			                	<span class="label-text col-md-6 col-form-label text-md-left">Pejabat Penilai</span>
 			                    <div class="col-md-6">
-			                        <select name="guru_1" id="cb_guru_dinilai_1" class="form-control" required>
+			                        <select name="penilai_pejabat" id="select_penilai_pejabat" class="form-control" required>
 			                            
 			                        </select>
 			                    </div>
 			           	 	</div>
-				      		<div class="form-group row">
+				      		<div class="form-group row" id="fg_penilai_1">
+			                	<span class="label-text col-md-6 col-form-label text-md-left">PA/PPA Penilai 1</span>
+			                    <div class="col-md-6">
+			                        <select name="penilai_pa_1" id="select_penilai_pa_1" class="form-control" required>
+			                            
+			                        </select>
+			                    </div>
+			           	 	</div>
+				      		<div class="form-group row" id="fg_penilai_2">
 			                	<span class="label-text col-md-6 col-form-label text-md-left">PA/PPA Penilai 2</span>
 			                    <div class="col-md-6">
-			                        <select name="guru_2" id="cb_guru_dinilai_2" class="form-control" required>
+			                        <select name="penilai_pa_2" id="select_penilai_pa_2" class="form-control" required>
 			                            
 			                        </select>
 			                    </div>
 			           	 	</div>
-				      		<div class="form-group row">
+				      		<div class="form-group row" id="fg_penilai_3">
 			                	<span class="label-text col-md-6 col-form-label text-md-left">PA/PPA Penilai 3</span>
 			                    <div class="col-md-6">
-			                        <select name="guru_3" id="cb_guru_dinilai_3" class="form-control" required>
+			                        <select name="penilai_pa_3" id="select_penilai_pa_3" class="form-control" required>
+			                            
+			                        </select>
+			                    </div>
+			           	 	</div>
+				      		<div class="form-group row" id="fg_penilai_4">
+			                	<span class="label-text col-md-6 col-form-label text-md-left">PA/PPA Penilai 4</span>
+			                    <div class="col-md-6">
+			                        <select name="penilai_pa_4" id="select_penilai_pa_4" class="form-control" required>
 			                            
 			                        </select>
 			                    </div>
@@ -192,6 +222,8 @@
 							$i=0;
 							$fi = 0;
 							$id_pen = "";
+							$rowspan = 0;
+							$nip_temp = "";
 							$idper = get_tahun_ajar_id();
 							$sql = "SELECT a.*, b.id_penilai_detail, b.nip as 'nip_dinilai', c.nama_ppa as 'penilai', d.nama_ppa as 'dinilai', e.jabatan FROM penilai a JOIN penilai_detail b ON a.id_penilai = b.id_penilai  JOIN user c ON a.nip = c.nip JOIN user d ON b.nip = d.nip JOIN jenis_user e ON d.id_jenis_user = e.id_jenis_user WHERE a.id_periode = $idper ORDER BY a.nip, e.level DESC";
 							$q = mysql_query($sql);
@@ -201,36 +233,41 @@
 								}else{
 									$ket = "Diri Sendiri";
 								}
-							
-								if($fi==0){
-									$odd='';
-									if($i%2==0){
-										$odd = 'class="tr_odd"';
-									}
-								$id_pen = $row['id_penilai'];
+								if($nip_temp == "" || $nip_temp != $row['nip']) {
+									$nip_temp = $row['nip'];
+							$sql = "SELECT COUNT(*) as total FROM penilai a JOIN penilai_detail b ON a.id_penilai = b.id_penilai  JOIN user c ON a.nip = c.nip JOIN user d ON b.nip = d.nip JOIN jenis_user e ON d.id_jenis_user = e.id_jenis_user WHERE a.id_periode = $idper AND a.nip = $nip_temp ORDER BY a.nip, e.level DESC";
+							$rowspan = mysql_query($sql);
+							$rowspan = mysql_fetch_assoc($rowspan);
+							$rowspan = $rowspan["total"];
+							if($fi%2 != 0) {
+								$odd='';
+							} else {
+								$odd = 'class="tr_odd"';
+							}
+							$fi++;
+							$id_pen = $row['id_penilai'];
 						?>
 
-						<tr <?= $odd; ?> >
-							<td rowspan="6" style="vertical-align:middle"><?= ++$i; ?></td>
-							<td rowspan="6" style="vertical-align:middle"><?= $row['penilai'].'<br><small>NIP : '.$row['nip'].'</small>'; ?></td>
+						<tr <?= $odd; ?>>
+							<td rowspan="<?php echo $rowspan; ?>" style="vertical-align:middle"><?= ++$i; ?></td>
+							<td rowspan="<?php echo $rowspan; ?>" style="vertical-align:middle"><?= $row['penilai'].'<br><small>NIP : '.$row['nip'].'</small>'; ?></td>
 							<td><?= $row['dinilai'].' ('.$ket.') <br><small>NIP : '.$row['nip_dinilai'].'</small>'; ?></td>
-							<td rowspan="6" style="vertical-align:middle; text-align:center;">
+							<td rowspan="<?php echo $rowspan; ?>" style="vertical-align:middle; text-align:center;">
 								<button class="btn btn-dark btn-sm btn_ubah" data-id="<?= $row['id_penilai']; ?>" ><span data-feather="edit"></span> </button>
 								<button class="btn btn-danger btn-sm  btn_hapus" data-id="<?= $row['id_penilai']; ?>" ><span data-feather="trash-2"></span> </button>
 							</td>
 						</tr>
 						<?php }else{ ?>
-						<tr <?= $odd; ?> >
+						<tr <?= $odd; ?>>
 							
 							<td><?= $row['dinilai'].' ('.$ket.') <br><small>NIP : '.$row['nip_dinilai'].'</small>'; ?></td>
 						</tr>
 						<?php } 
-							$fi++;
-							if($fi>=6){
-								$fi=0;	
+							// if($fi>=6){
+							// 	$fi=0;	
+							// }
 							}
 							
-							} 
 						?>
 					</tbody>
 				</table>
@@ -260,59 +297,104 @@
 </div>
 
 <script type="text/javascript">
-	var guru_penilaian = '';
-	var guru_dinilai_1 = data_guru_pen2;
-	var guru_dinilai_2 = guru_dinilai_1;
+	var dinilai = '';
+	var penilai_pejabat = '';
+	var penilai_pa = '';
+	var temp_data_penilai_pa = data_penilai_pa.slice(0);
     $(document).ready(function(){
-
     	$("#exampleModalCenter").on('hidden.bs.modal', function (event) {
     		document.location="index.php?p=memilihpen";
     	});
     	$("#exampleModalCenter").on('show.bs.modal', function (event) {
-	    	guru_penilaian = '';
-	    	data_guru.forEach(isi_guru);
-			$("#cb_guru_penilai").html('');
-			$("#cb_guru_penilai").append('<option value="">[ Pilih Guru ]</value>');
-			$("#cb_guru_penilai").append(guru_penilaian);
+	    	dinilai = '';
+	    	data_dinilai.forEach(isi_dinilai);
+			$("#select_dinilai").html('');
+			$("#select_dinilai").append('<option value="">[ Pilih PA/PPA Dinilai ]</value>');
+			$("#select_dinilai").append(dinilai);
+
+			$("#fg_pejabat").hide();
+			$("#fg_penilai_1").hide();
+			$("#fg_penilai_2").hide();
+			$("#fg_penilai_3").hide();
+			$("#fg_penilai_4").hide();
     	});
 
-		$("#cb_guru_penilai").change(function(){
+		$("#select_dinilai").change(function(){
+	 		temp_data_penilai_pa = data_penilai_pa.slice(0);
 			var v = $(this).val();
-			var ind = get_index(v);
-			guru_dinilai_1.splice(ind, 1);
-			guru_penilaian = '';
-			guru_dinilai_1.forEach(isi_guru);
-			$("#cb_guru_dinilai_1").html('');
-			$("#cb_guru_dinilai_1").append('<option value="">[ Pilih Guru ]</value>');
-			$("#cb_guru_dinilai_1").append(guru_penilaian);
+			console.log(temp_data_penilai_pa);
+			var ind = get_id(v, temp_data_penilai_pa);
+			temp_data_penilai_pa.splice(ind, 1);
+			penilai_pa = '';
+			temp_data_penilai_pa.forEach(isi_penilai_pa);
+			penilai_pejabat = '';
+			data_penilai_pejabat.forEach(isi_penilai_pejabat);
+			$("#select_penilai_pejabat").html('');
+			$("#select_penilai_pa_1").html('');
+			$("#select_penilai_pa_2").html('');
+			$("#select_penilai_pa_3").html('');
+			$("#select_penilai_pa_4").html('');
+			$("#fg_pejabat").show();
+			$("#fg_penilai_1").hide();
+			$("#fg_penilai_2").hide();
+			$("#fg_penilai_3").hide();
+			$("#fg_penilai_4").hide();
+			$("#select_penilai_pejabat").append('<option value="">[ Pilih Pejabat Penilai ]</value>');
+			$("#select_penilai_pejabat").append(penilai_pejabat);
+			$("#select_penilai_pa_1").append('<option value="">[ Pilih PA/PPA Penilai 1 ]</value>');
+			$("#select_penilai_pa_1").append(penilai_pa);
 		});
 
-
-		$("#cb_guru_dinilai_1").change(function(){
-			var v = $(this).val();
-			var ind = get_index(v);
-			guru_dinilai_2 = guru_dinilai_1;
-			guru_dinilai_2.splice(ind, 1);
-			guru_penilaian = '';
-			guru_dinilai_2.forEach(isi_guru);
-			$("#cb_guru_dinilai_2").html('');
-			$("#cb_guru_dinilai_2").append('<option value="">[ Pilih Guru ]</value>');
-			$("#cb_guru_dinilai_2").append(guru_penilaian);
+		$("#select_penilai_pejabat").change(function(){
+			$("#fg_penilai_1").show();
+			$("#fg_penilai_2").hide();
+			$("#fg_penilai_3").hide();
+			$("#fg_penilai_4").hide();
 		});
 
-
-		$("#cb_guru_dinilai_2").change(function(){
+		$("#select_penilai_pa_1").change(function(){
 			var v = $(this).val();
-			var ind = get_index(v);
-			var guru_dinilai_3 = guru_dinilai_2;
-			guru_dinilai_3.splice(ind, 1);
-			guru_penilaian = '';
-			guru_dinilai_3.forEach(isi_guru);
-			$("#cb_guru_dinilai_3").html('');
-			$("#cb_guru_dinilai_3").append('<option value="">[ Pilih Guru ]</value>');
-			$("#cb_guru_dinilai_3").append(guru_penilaian);
+			var ind = get_id(v, temp_data_penilai_pa);
+			temp_data_penilai_pa.splice(ind, 1);
+			penilai_pa = '';
+			temp_data_penilai_pa.forEach(isi_penilai_pa);
+			$("#select_penilai_pa_2").html('');
+			$("#select_penilai_pa_3").html('');
+			$("#select_penilai_pa_4").html('');
+			$("#fg_penilai_2").show();
+			$("#fg_penilai_3").hide();
+			$("#fg_penilai_4").hide();
+			$("#select_penilai_pa_2").append('<option value="">[ Pilih PA/PPA Penilai 2 ]</value>');
+			$("#select_penilai_pa_2").append(penilai_pa);
 		});
 
+		$("#select_penilai_pa_2").change(function(){
+			var v = $(this).val();
+			var ind = get_id(v, temp_data_penilai_pa);
+			temp_data_penilai_pa.splice(ind, 1);
+			penilai_pa = '';
+			temp_data_penilai_pa.forEach(isi_penilai_pa);
+			$("#select_penilai_pa_3").html('');
+			$("#select_penilai_pa_4").html('');
+			$("#fg_penilai_3").show();
+			$("#fg_penilai_4").hide();
+			$("#select_penilai_pa_3").append('<option value="">[ Pilih PA/PPA Penilai 3 ]</value>');
+			$("#select_penilai_pa_3").append(penilai_pa);
+		});
+
+		$("#select_penilai_pa_3").change(function(){
+			var v = $(this).val();
+			var ind = get_id(v, temp_data_penilai_pa);
+			temp_data_penilai_pa.splice(ind, 1);
+			penilai_pa = '';
+			temp_data_penilai_pa.forEach(isi_penilai_pa);
+			if(temp_data_penilai_pa.length > 0) {
+				$("#select_penilai_pa_4").html('');
+				$("#fg_penilai_4").show();
+				$("#select_penilai_pa_4").append('<option value="">[ Pilih PA/PPA Penilai 4 ]</value>');
+				$("#select_penilai_pa_4").append(penilai_pa);
+			}
+		});
 
 		$(".btn_hapus").click(function(){
 			var daid = $(this).attr("data-id");
@@ -330,43 +412,27 @@
 				url: _url, 
 				success: function(result){
 			  		var res = JSON.parse(result);
-			  		
 			  		$("#txt_id_penilai").val(res.id_penilai);
-
-			  		$("#cb_guru_penilai").html("");
-			  		$("#cb_guru_penilai").append("<option value='"+res.nip+"'>"+get_nama(res.nip, data_guru_pen2)+"</option>");
-			  		$("#cb_guru_penilai").attr("readonly", true);
-					guru_penilaian = '';
-
-					var ind = get_index(res.nip);
-					guru_dinilai_1.splice(ind, 1);
-					guru_dinilai_1.forEach(isi_guru);
-			  		$("#cb_guru_penilai_1").html("");
-					$("#cb_guru_dinilai_1").append('<option value="">[ Pilih Guru ]</value>');
-					$("#cb_guru_dinilai_1").append(guru_penilaian);
-					$("#cb_guru_dinilai_1>option[value="+res.penilai1+"]").attr("selected", true);
-			  		
-
-					guru_dinilai_2 = guru_dinilai_1;
-					ind = get_index(res.penilai1);
-					guru_dinilai_2.splice(ind, 1);
-					guru_penilaian = '';
-					guru_dinilai_2.forEach(isi_guru);
-			  		$("#cb_guru_penilai_2").html("");
-					$("#cb_guru_dinilai_2").append('<option value="">[ Pilih Guru ]</value>');
-					$("#cb_guru_dinilai_2").append(guru_penilaian);
-					$("#cb_guru_dinilai_2>option[value="+res.penilai2+"]").attr("selected", true);
-
-
-					var guru_dinilai_3 = guru_dinilai_2;
-					ind = get_index(res.penilai2);
-					guru_dinilai_3.splice(ind, 1);
-					guru_penilaian = '';
-					guru_dinilai_3.forEach(isi_guru);
-			  		$("#cb_guru_penilai_2").html("");
-					$("#cb_guru_dinilai_3").append('<option value="">[ Pilih Guru ]</value>');
-					$("#cb_guru_dinilai_3").append(guru_penilaian);
-					$("#cb_guru_dinilai_3>option[value="+res.penilai3+"]").attr("selected", true);
+			  		$("#select_dinilai").append("<option value='"+res.nip+"'>"+res.nama_dinilai+"</option>");
+					$('#select_dinilai option[value='+res.nip+']').prop('selected', true);
+					$("#select_dinilai").attr("disabled", true);
+					dinilai = '';
+					$("#select_dinilai").trigger('change');
+					$('#select_penilai_pejabat option[value='+res.pejabat+']').prop('selected', true);
+					$('#select_penilai_pa_1 option[value='+res.penilai1+']').prop('selected', true);
+					$("#select_penilai_pa_1").trigger('change');
+					$('#select_penilai_pa_2 option[value='+res.penilai2+']').prop('selected', true);
+					console.log(data_penilai_pa);
+					$("#select_penilai_pa_2").trigger('change');
+					$('#select_penilai_pa_3 option[value='+res.penilai3+']').prop('selected', true);
+					$("#select_penilai_pa_3").trigger('change');
+					$('#select_penilai_pa_4 option[value='+res.penilai4+']').prop('selected', true);
+					$("#select_penilai_pa_4").trigger('change');
+					$("#fg_pejabat").show();
+					$("#fg_penilai_1").show();
+					$("#fg_penilai_2").show();
+					$("#fg_penilai_3").show();
+					$("#fg_penilai_4").show();
 			  	}
 			});
 		});
@@ -374,17 +440,34 @@
 
     });
 
-    function isi_guru(value) {
-  		guru_penilaian = guru_penilaian + "<option value='"+value.nip+"'>"+value.nama+"</option>" ; 
+    function isi_dinilai(value) {
+  		dinilai = dinilai + "<option value='"+value.nip+"'>"+value.nama+"</option>" ; 
+	}
+
+    function isi_penilai_pa(value) {
+		penilai_pa = penilai_pa + "<option value='"+value.nip+"'>"+value.nama+"</option>" ; 
+	}
+
+	function isi_penilai_pejabat(value) {
+		penilai_pejabat = penilai_pejabat + "<option value='"+value.nip+"'>"+value.nama+"</option>" ; 
 	}
 
 	function get_index (nip) {
-		for(var i = 0; i < data_guru_pen2.length; i++){
-			if(data_guru_pen2[i].nip == nip){
+		for(var i = 0; i < data_penilai_pa.length; i++){
+			if(data_penilai_pa[i].nip == nip){
 				return i;
 			}
 		}
 		return -1; 
+	}
+
+	function get_id (nip, arr) {
+		for(var i = 0; i < arr.length; i++){
+			if(arr[i].nip == nip){
+				return i;
+			}
+		}
+		return ""; 
 	}
 
 	function get_nama (nip, arr) {

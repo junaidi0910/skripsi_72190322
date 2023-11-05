@@ -160,27 +160,6 @@
 							      	<input type="text" class="form-control form-control-sm" id="semester" name="semester" value="<?= isset($semester)?$semester:""; ?>" placeholder="Semester">
 							    </div>
 						  	</div>
-						  	<fieldset>
-						  		<legend>Presentase Penilaian</legend>
-					       	 	<div class="form-group row">
-								   	<label for="atasan" class="col-sm-3 col-form-label col-form-label-sm">Presentase Atasan</label>
-								    <div class="col-sm-9">
-								      	<input type="number" class="form-control form-control-sm presentase" min="0" max="100" id="atasan" name="atasan" value="<?= isset($atasan)?$atasan:""; ?>" placeholder="Presentase Atasan">
-								    </div>
-							  	</div>
-							  	<div class="form-group row">
-								   	<label for="rekan" class="col-sm-3 col-form-label col-form-label-sm">Presentase Rekan Kerja</label>
-								    <div class="col-sm-9">
-								      	<input type="number" class="form-control form-control-sm presentase" min="0" max="100" id="rekan" name="rekan" value="<?= isset($rekan)?$rekan:""; ?>" placeholder="Presentase Rekan Kerja">
-								    </div>
-							  	</div>
-							  	<div class="form-group row">
-								   	<label for="diri" class="col-sm-3 col-form-label col-form-label-sm">Presentase Diri Sendiri</label>
-								    <div class="col-sm-9">
-								      	<input type="number" class="form-control form-control-sm presentase" min="0" max="100" id="diri" name="diri" value="<?= isset($diri)?$diri:""; ?>" placeholder="Presentase Diri Sendiri">
-								    </div>
-							  	</div>
-						  	<fieldset>
 				      	</div>
 				      	<div class="modal-footer">
 				        	<button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -203,9 +182,8 @@
 						<tr>
 							<th width="10%">No</th>
 							<th width="20%">Tahun Ajaran</th>
-							<th width="20%">Semester</th>
-							<th width="20%">Penilaian</th>
-							<th width="10%">Status</th>
+							<th width="30%">Semester</th>
+							<th width="20%">Status</th>
 							<th width="30%">Aksi</th>
 						</tr>
 					</thead>
@@ -226,7 +204,6 @@
 							<td><?= ++$i; ?></td>
 							<td><?= $row['tahun_ajar']; ?></td>
 							<td><?= $row['semester']; ?></td>
-							<td><?= $setting; ?></td>
 							<td>
 								<?php if($row['status_periode']==0){ ?>
 									<span class="label label-danger">Tidak Aktif</span>

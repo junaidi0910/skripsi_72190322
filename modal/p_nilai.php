@@ -19,13 +19,13 @@
 				$_SESSION["flash"]["type"] = "danger";
 				$_SESSION["flash"]["head"] = "Terjadi Kesalahan";
 				$_SESSION["flash"]["msg"] = "Data gagal disimpan! ";
-
+				
 				header("location:../index.php?p=melakukanpen");
 			}
 		}
 		$sql = "INSERT INTO penilaian (id_penilai_detail, id_isi, hasil_nilai) VALUES ";
 		$i = 0;
-
+		
 		foreach ($_POST as $k => $v) {
 			if(substr($k, 0, 16)=='nilai_kompetensi'){
 				//echo "$k = $v <br>";
@@ -39,6 +39,8 @@
 			}
 		}
 		$insert = mysql_query($sql);
+		$sql = "UPDATE penilai_detail SET status = 0, pesan = NULL WHERE id_penilai_detail = $id_penilaian_detail";
+		$update = mysql_query($sql);
 		if($insert){
 			$_SESSION["flash"]["type"] = "success";
 			$_SESSION["flash"]["head"] = "Sukses";
@@ -52,5 +54,27 @@
 		}
 
 		header("location:../index.php?p=melakukanpen");
+	} else if($_POST['keberatan']){
+        $sql = "SELECT * FROM penilai_detail WHERE id_penilai_detail = '". $_POST["nip_penilai"] . "'";
+		$q = mysql_query($sql);
+		$row = mysql_fetch_array($q);
+		if(mysql_num_rows($q)>0){
+			if($_POST['setuju']){
+				$sql = "UPDATE penilai_detail SET status = 2 WHERE id_penilai_detail = '". $_POST["nip_penilai"] . "'";
+			} else {
+				$sql = "UPDATE penilai_detail SET status = 1, pesan =  '". $_POST["pesan"] . "'  WHERE id_penilai_detail = '". $_POST["nip_penilai"] . "'";
+			}
+			$query = mysql_query($sql);
+			if($query){
+				$_SESSION["flash"]["type"] = "success";
+				$_SESSION["flash"]["head"] = "Sukses";
+				$_SESSION["flash"]["msg"] = "Berhasil mengajukan keberatan!";
+			}else{
+				$_SESSION["flash"]["type"] = "danger";
+				$_SESSION["flash"]["head"] = "Terjadi Kesalahan";
+				$_SESSION["flash"]["msg"] = "Gagal mengajukan keberatan! ".mysql_error();
+			}
+			header("location:../index.php?p=home");
+		}
 	}
 ?>

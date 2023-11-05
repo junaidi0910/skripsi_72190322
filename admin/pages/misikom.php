@@ -85,6 +85,7 @@
 
 			<?php 
 				$btn = "Tambah"; 
+				$id_kelpenilaian = 0;
 				if(isset($_GET['ubah'])){
 					$id_isi = isset($_GET['id_isi'])?mysql_real_escape_string(htmlspecialchars($_GET['id_isi'])):"";
 					$sql = "SELECT * FROM isi_penilaian WHERE id_isi = $id_isi";
@@ -150,9 +151,8 @@
 									<label for="ket" class="col-sm-3 control-form-label col-form-label-sm">Penilai</label>
 									<div class="col-sm-9">
 										<select class="form-control form-control-sm sel-penilai" multiple id="ket" name="ket">
-							          		<option value="0">Atasan</option>
+							          		<option value="0">Pejabat Penilai</option>
 							          		<option value="1">Rekan Kerja</option>
-							          		<option value="2">Diri Sendiri</option>
 									   	</select>
 									</div>
 								</div>
@@ -197,7 +197,7 @@
 							<td><?= $row['nama_kelpenilaian']; ?></td>
 							<td><?= $row['isi_penilaian']; ?></td>
 							<td><?php 
-								$a = ['Atasan', 'Rekan Kerja', 'Diri Sendiri'];
+								$a = ['Pejabat Penilai', 'Rekan Kerja', 'Diri Sendiri'];
 								$ret = '';
 								if($row['ket']!=''){
 									$ket = explode(",", $row['ket']);

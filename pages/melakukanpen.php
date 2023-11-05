@@ -106,7 +106,7 @@ input[type=number] {
                     <?php
                         $i=0;
                         $nip_s = $_SESSION[md5('user')];
-                        $sql = "SELECT a.id_penilai, a.nip, c.nama_ppa, b.id_penilai_detail FROM penilai a JOIN penilai_detail b  ON a.id_penilai = b.id_penilai
+                        $sql = "SELECT a.id_penilai, a.nip, c.nama_ppa, b.id_penilai_detail, b.status, b.pesan FROM penilai a JOIN penilai_detail b  ON a.id_penilai = b.id_penilai
                                 JOIN user c ON a.nip = c.nip WHERE b.nip = '$nip_s' ";
                                 /*AND b.id_penilai_detail NOT IN(SELECT id_penilai_detail FROM penilaian)*/
                         //echo $sql;
@@ -122,7 +122,7 @@ input[type=number] {
                             <?php
                             $sql2 = "SELECT * FROM penilai a JOIN penilai_detail b ON a.id_penilai = b.id_penilai JOIN penilaian c ON b.id_penilai_detail = c.id_penilai_detail WHERE b.id_penilai_detail = ".$row['id_penilai_detail'];
                             $q2 = mysql_query($sql2);
-                            if(mysql_num_rows($q2)==0){ ?>
+                            if(mysql_num_rows($q2)==0 || $row['status'] == 1){  ?>
                             <a href="index.php?p=melakukanpen&id=<?= $row['id_penilai']; ?>" class="btn btn-success btn-sm">
                                 <span class="fa fa-pencil fa-2x"></span> 
                             </a>
@@ -139,25 +139,64 @@ input[type=number] {
         </div>
         <?php }else{ ?>
         <?php
-            $nip_s = $_SESSION[md5('user')];
-            $ssql = "SELECT * FROM user c JOIN jenis_user d ON c.id_jenis_user = d.id_jenis_user WHERE c.nip = '$nip_s'";
-            $q = mysql_query($ssql);
-            $rw = mysql_fetch_array($q);
-            $sebagai = $rw['level']==3?'0':($rw['level']==1?'1':($nip_s==$rw['nip']?'2':''));
-
+            $status = '';
+            if(isset($_GET["idpenilai"])) {
+                $ssql = "SELECT c.nama_ppa, c.nip, c.golongan, c.jabatan, c.unit_organisasi, d.jabatan as level, ROUND(AVG(a.hasil_nilai),2) as rata2, b.status, b.id_penilai, b.id_penilai_detail, d.id_jenis_user FROM penilaian a JOIN penilai_detail b ON b.id_penilai_detail = a.id_penilai_detail JOIN user c ON c.nip = b.nip JOIN jenis_user d ON d.id_jenis_user = c.id_jenis_user JOIN penilai e ON e.id_penilai = b.id_penilai WHERE b.id_penilai_detail = '". $_GET["idpenilai"]."' GROUP BY a.id_penilai_detail";
+                $q = mysql_query($ssql);
+                $rw = mysql_fetch_array($q);
+                $status = $rw["status"];
+                $sebagai = $rw['level']==3?'0':($rw['level']==1?'1':($_GET["idpenilai"]==$rw['nip']?'2':''));
+            } else {
+                $nip_s = $_SESSION[md5('user')];
+                $ssql = "SELECT * FROM user c JOIN jenis_user d ON c.id_jenis_user = d.id_jenis_user WHERE c.nip = '$nip_s'";
+                $q = mysql_query($ssql);
+                $rw = mysql_fetch_array($q);
+                $sebagai = $rw['level']==3?'0':($rw['level']==1?'1':($nip_s==$rw['nip']?'2':''));
+            }
+           
             $id_penilai = isset($_GET['id'])?mysql_real_escape_string(htmlspecialchars($_GET['id'])):"";
-            $sql = "SELECT a.id_penilai, a.nip, b.nama_ppa, b.golongan, b.unit_organisasi, b.jabatan FROM penilai a JOIN user b ON a.nip = b.nip JOIN jenis_user c ON b.id_jenis_user = c.id_jenis_user WHERE a.id_penilai = '$id_penilai'";
+            $sql = "SELECT a.id_penilai, a.nip, b.id_jenis_user, b.nama_ppa, b.golongan, b.unit_organisasi, b.jabatan FROM penilai a JOIN user b ON a.nip = b.nip JOIN jenis_user c ON b.id_jenis_user = c.id_jenis_user WHERE a.id_penilai = '$id_penilai'";
             $q = mysql_query($sql);
             $row  = mysql_fetch_array($q);
         ?>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="row">
-                <div class="col-lg-7 col-md-7 col-sm-12">
+                <div class="col-lg-12 col-md-12 mb-4">
                     <h2>Penilaian Kinerja (DP3)</h2>
-                    <br>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
                     <table class="table">
                         <tr>
-                            <td><strong>Nama</strong></td>
+                            <td><strong>Nama Pemberi Nilai</strong></td>
+                            <td>:</td>
+                            <td> <?= $rw["nama_ppa"]; ?></td>
+                        </tr>
+                        <tr>
+                            <td width="40%"><strong>NIP</strong></td>
+                            <td width="1%">:</td>
+                            <td> <?= $rw['nip']; ?></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Pangkat, Golongan / ruang</strong></td>
+                            <td>:</td>
+                            <td> <?= $rw['golongan']; ?></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Jabatan / Pekerjaan</strong></td>
+                            <td>:</td>
+                            <td> <?= $rw['jabatan']; ?></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Unit Organisasi</strong></td>
+                            <td>:</td>
+                            <td> <?= $rw['unit_organisasi']; ?></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <table class="table">
+                        <tr>
+                            <td><strong>Nama yang Dinilai</strong></td>
                             <td>:</td>
                             <td> <?= $row['nama_ppa']; ?></td>
                         </tr>
@@ -183,10 +222,6 @@ input[type=number] {
                         </tr>
                     </table>
                 </div>
-                <div class="col-lg-4 col-md-4 col-sm-12 offset-md-1 offset-lg-1 align-self-end">
-                    <h2 class="text-center">KETERANGAN</h2>
-                    <p>Nilai rata-rata adalah jumlah dibagi dengan jumlah unsur yang dinilai.</p>
-                </div>
             </div>
             <form class="form-horizontal" method="post" action="modal/p_nilai.php">
             <div class="row mt-4">
@@ -202,7 +237,11 @@ input[type=number] {
                         <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Kompetensi Sosial</a>
                         <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contacti" role="tab" aria-controls="nav-contacti" aria-selected="false">Kompetensi Profesional</a>
                         --><?php 
-                            $sql = "SELECT * FROM kelompok_penilaian";
+                            if($row["id_jenis_user"] == $rw["id_jenis_user"]) {
+                                $sql = "SELECT * FROM kelompok_penilaian WHERE nama_kelpenilaian = 'Rekan Kerja'";
+                            } else {
+                                $sql = "SELECT * FROM kelompok_penilaian";
+                            }
                             $q = mysql_query($sql);
                             $i = 0;
                             $data_kompetensi = [];
@@ -210,6 +249,7 @@ input[type=number] {
                                 $data_kompetensi[$i]['id_kelpenilaian'] = $row['id_kelpenilaian'];
                                 $data_kompetensi[$i]['nama_kelpenilaian'] = $row['nama_kelpenilaian'];
                                 $data_kompetensi[$i]['bobot_kelpenilaian'] = $row['bobot_kelpenilaian'];
+                                
                                 if($i==0){
                         ?>
                             <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-<?= $row['id_kelpenilaian']; ?>" role="tab" aria-controls="nav-home" aria-selected="true"><?= $row['nama_kelpenilaian']; ?></a>
@@ -250,15 +290,41 @@ input[type=number] {
                                     <tbody>
                                         <?php
                                             $i=0;
-                                            $sq = "SELECT * FROM isi_penilaian WHERE id_kelpenilaian = $v[id_kelpenilaian] AND ket LIKE '%$sebagai%' ";
+                                            if(isset($_GET["idpenilai"])) {
+                                                $sq = "SELECT * FROM isi_penilaian a JOIN penilaian b ON b.id_isi = a.id_isi WHERE a.id_kelpenilaian = $v[id_kelpenilaian] AND a.ket LIKE '%$sebagai%' ";
+                                            } else {
+                                                $sq = "SELECT * FROM isi_penilaian WHERE id_kelpenilaian = $v[id_kelpenilaian] AND ket LIKE '%$sebagai%' ";
+                                            }
+                                            $tot = 0;
                                             $qs = mysql_query($sq);
+                                            $banyak = mysqli_num_rows($qs);
                                             while($row = mysql_fetch_array($qs)){
                                         ?>
                                         <tr>
                                             <td ><?= ++$i; ?></td>
                                             <td ><?= $row['isi_penilaian']; ?></td>
-                                            <td><input type="number" name="nilai_kompetensi_<?= $row['id_isi']; ?>" id="nilai_kompetensi_<?= $row['id_isi']; ?>" style="width:50px;" class="angka"/></td>
-                                            <td id="kompetensi_<?= $row['id_isi']; ?>"></td>
+                                            <?php if(isset($_GET["idpenilai"])) { 
+                                                if($row['hasil_nilai'] >= 91 && $row['hasil_nilai'] <= 100) {
+                                                    $sebutan = 'Amat Baik';
+                                                } else if ($row['hasil_nilai'] >= 76 && $row['hasil_nilai'] <= 90) {
+                                                    $sebutan = 'Baik';
+                                                } else if ($row['hasil_nilai'] >= 61 && $row['hasil_nilai'] <= 75) {
+                                                $sebutan = 'Cukup Baik';
+                                            } else if ($row['hasil_nilai'] >= 51 && $row['hasil_nilai'] <= 60) {
+                                                $sebutan = 'Sedang';
+                                            } else if ($row['hasil_nilai'] <= 50) {
+                                                $sebutan = 'Kurang';
+                                            } else {
+                                                $sebutan = '';
+                                            }    
+                                            $tot += $row['hasil_nilai'];
+                                            ?>
+                                                <td ><?= $row['hasil_nilai']; ?></td>
+                                                <td id="kompetensi_<?= $row['id_isi']; ?>"><?= $sebutan; ?></td>
+                                                <?php } else { ?>
+                                                    <td><input type="number" name="nilai_kompetensi_<?= $row['id_isi']; ?>" id="nilai_kompetensi_<?= $row['id_isi']; ?>" style="width:50px;" class="angka angka_<?= $v['id_kelpenilaian']; ?>"/></td>
+                                                <td id="kompetensi_<?= $row['id_isi']; ?>"></td>
+                                            <?php } ?>
                                             <!-- <td class="form-group">
                                                 <input class="form-control form-control-lg" type="radio" name="kompetensi_<?= $row['id_isi']; ?>" id="kompetensi_<?= $row['id_isi']; ?>_1" title="Tidak Mampu" value="1" required>
                                             </td>
@@ -270,19 +336,55 @@ input[type=number] {
                                             </td>
                                             <td class="form-group">
                                                 <input class="form-control form-control-lg" type="radio" name="kompetensi_<?= $row['id_isi']; ?>" id="kompetensi_<?= $row['id_isi']; ?>_4" title="Sangat Mampu" value="4" required>
-                                            </td> -->
-                                        </tr>
-                                        <?php } ?>
+                                                </td> -->
+                                                </tr>
+                                                <?php } 
+                                                $rata2 = $tot/$i;
+                                                ?>
                                     </tbody>
+                                    </table>
+                                    <table>
+                                            <tr>
+                                                <td width="25%"><b>Jumlah Nilai</b></td>
+                                                <td width="5%" class="p-0"><b>:</b></td>
+                                                <td id="jumlah_nilai_<?= $v['id_kelpenilaian']; ?>" class="font-weight-bold"><?= $tot; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td width="25%"><b>Nilai Rata-rata</b></td>
+                                                <td width="5%" class="p-0"><b>:</b></td>
+                                            <td id="rata2_<?= $v['id_kelpenilaian']; ?>" class="font-weight-bold"><?= $rata2; ?></td>
+                                        </tr>
                                 </table>
-                            </div>
+                                </div>
+                                <script type="text/javascript">
+                                    $(".angka").keyup(function () {
+                                        var arr = $('.angka_<?= $v['id_kelpenilaian']; ?>')
+                                    var tot = 0;
+                                    var avg = 0;
+                                    
+                                    for (var i = 0; i < arr.length; i++) {
+                                        if (parseInt(arr[i].value))
+                                        tot += parseInt(arr[i].value);
+                                }
+                                
+                                avg = tot/arr.length;
+                                
+                                if(tot) {
+                                        $('#jumlah_nilai_<?= $v['id_kelpenilaian']; ?>').html(tot);
+                                        $('#rata2_<?= $v['id_kelpenilaian']; ?>').html(avg);
+                                    } else {
+                                        $('#jumlah_nilai_<?= $v['id_kelpenilaian']; ?>').html('0');
+                                        $('#rata2_<?= $v['id_kelpenilaian']; ?>').html('0');
+                                    }
+                                });
+                                </script>
                         <?php
                         }
-                    ?>
+                        ?>
                     </div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-12 offset-lg-1 offset-sm-1">
-                    <?php
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-12 offset-lg-1 offset-sm-1">
+                        <?php
                         $nip_s = $_SESSION[md5('user')];
                         $sql = "SELECT * FROM penilai a JOIN penilai_detail b ON a.id_penilai = b.id_penilai JOIN penilaian c ON b.id_penilai_detail = c.id_penilai_detail WHERE a.id_penilai = '$id_penilai' AND b.nip = '$nip_s'";
                         $q = mysql_query($sql);
@@ -294,7 +396,9 @@ input[type=number] {
                             echo '</script>';
                         }
                     ?>
-                    <h2 class="text-center">NILAI SEBUTAN</h2>
+                    <h2 class="text-center">KETERANGAN</h2>
+                    <p>Nilai rata-rata adalah jumlah dibagi dengan jumlah unsur yang dinilai.</p>
+                    <h2 class="text-center mt-5">NILAI SEBUTAN</h2>
                     <table cellspacing="0" class="no-spacing">
                         <tr>
                             <td width="25%" class="p-0">91 - 100</td>
@@ -324,10 +428,22 @@ input[type=number] {
                     </table>
                 </div>
                 <div class="container">
+                    <br>
+                    <?php if($status == 0) { ?>
+                    </form>
+                        <form class="form-horizontal" method="post" action="modal/p_nilai.php">
+                            <input type="hidden" name="nip_penilai" value="<?= $rw['id_penilai_detail']; ?>" >
+                            <input type="hidden" name="keberatan" value="<?= $_SESSION[md5('user')]; ?>" >
+                            <span>Keberatan dari PA/PPA yang dinilai</span>
+                            <input type="text" name="pesan" style="width: 50%">
+                            <button type="submit" class="btn btn-danger btn-md">Ajukan Keberatan</button>
+                        </form>
+                    <?php } else { ?>
                     <div class="float-right">
                         <br>
                         <button type="submit" class="btn btn-primary btn-md">Simpan</button>
                     </div>
+                    <?php } ?>
                 </div>
                 <?php } ?>
             </div>
