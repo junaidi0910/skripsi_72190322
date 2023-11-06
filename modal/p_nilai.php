@@ -55,18 +55,14 @@
 
 		header("location:../index.php?p=melakukanpen");
 	} else if($_POST['keberatan']){
-		if(isset($_POST['setuju'])){
-        	$sql = "SELECT * FROM penilai_detail WHERE nip = '". $_POST["nip_penilai"] . "'";
-		} else {
-        	$sql = "SELECT * FROM penilai_detail WHERE id_penilai_detail = '". $_POST["nip_penilai"] . "'";
-		}
+		$sql = "SELECT * FROM penilai_detail WHERE id_penilai_detail = '". $_POST["nip_penilai"] . "'";
 		$q = mysql_query($sql);
 		$row = mysql_fetch_array($q);
 		// die($sql);
 		// echo mysql_num_rows($q);
 		if(mysql_num_rows($q)>0){
 			if(isset($_POST['setuju'])){
-				$sql = "UPDATE penilai_detail SET status = 2 WHERE nip = '". $_POST["nip_penilai"] . "'";
+				$sql = "UPDATE penilai_detail SET status = 2 WHERE id_penilai_detail = '". $_POST["nip_penilai"] . "'";
 			} else {
 				$sql = "UPDATE penilai_detail SET status = 1, pesan =  '". $_POST["pesan"] . "'  WHERE id_penilai_detail = '". $_POST["nip_penilai"] . "'";
 			}

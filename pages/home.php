@@ -255,7 +255,7 @@ echo "</script>";
 						<?php if($row["status"] == 0) { ?>
 						<td><a class="btn btn-danger" href="index.php?p=melakukanpen&id=<?= $row['id_penilai']; ?>&idpenilai=<?= $row['id_penilai_detail']; ?>">Keberatan</a>
 						<form class="form-horizontal" method="post" action="modal/p_nilai.php">
-                            <input type="hidden" name="nip_penilai" value="<?= $row['nip']; ?>" >
+                            <input type="hidden" name="nip_penilai" value="<?= $row['id_penilai_detail']; ?>" >
                             <input type="hidden" name="keberatan" value="<?= $_SESSION[md5('user')]; ?>" >
                        
               <button type="submit" name="setuju" class="btn btn-success">Setuju</button> </form></td>
