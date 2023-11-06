@@ -192,7 +192,7 @@
         });
 
         setTimeout(function(){
-            $(".alert").hide(500);
+            $(".alert_model").hide(500);
         }, 3000);
     </script>  
     

@@ -16,7 +16,56 @@
     	<h3>Penilaian Kinerja DP3 UKDW</h3>
   	</div>
 </div>
-
+<?php
+	$sql = "SELECT c.nama_ppa, c.nip, c.golongan, c.jabatan, c.unit_organisasi, d.jabatan as level, ROUND(AVG(a.hasil_nilai),2) as rata2, b.status, b.id_penilai, b.id_penilai_detail FROM penilaian a JOIN penilai_detail b ON b.id_penilai_detail = a.id_penilai_detail JOIN user c ON c.nip = b.nip JOIN jenis_user d ON d.id_jenis_user = c.id_jenis_user JOIN penilai e ON e.id_penilai = b.id_penilai WHERE e.nip = '". $_SESSION[md5('user')]."' GROUP BY a.id_penilai_detail";
+	$q = mysql_query($sql);
+	$j = mysql_num_rows($q);
+	// echo $sql;
+    $i = 1;
+	if($j > 0) {
+		?>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>N</th>
+						<th>Dari</th>
+						<th>Golongan</th>
+						<th>Jabatan</th>
+						<th>Unit Organiasi</th>
+						<th>Level User</th>
+						<th>Nilai Rata-rata</th>
+						<th>Aksi</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+						while($row = mysql_fetch_array($q)){
+					?>
+					<tr>
+						<td><?= $i; ?></td>
+						<td><?= $row["nama_ppa"]; ?></td>
+						<td><?= $row["golongan"]; ?></td>
+						<td><?= $row["jabatan"]; ?></td>
+						<td><?= $row["unit_organisasi"]; ?></td>
+						<td><?= $row["level"]; ?></td>
+						<td><?= $row["rata2"]; ?></td>
+						<?php if($row["status"] == 0) { ?>
+						<td><a class="btn btn-danger" href="index.php?p=melakukanpen&id=<?= $row['id_penilai']; ?>&idpenilai=<?= $row['id_penilai_detail']; ?>">Keberatan</a>
+						<form class="form-horizontal" method="post" action="modal/p_nilai.php">
+                            <input type="hidden" name="nip_penilai" value="<?= $row['id_penilai_detail']; ?>" >
+                            <input type="hidden" name="keberatan" value="<?= $_SESSION[md5('user')]; ?>" >
+                       
+              <button type="submit" name="setuju" class="btn btn-success">Setuju</button> </form></td>
+			  			<?php } else if($row["status"] == 1) { ?>
+							<td>Telah mengajukan keberatan</td>
+			  			<?php } else { ?>
+							<td>Telah disetujui</td>
+						<?php } ?>
+					</tr>
+					<?php $i++; } ?>
+				</tbody>
+			</table>
+<?php } ?>
 <?php
 
 echo "<script>";

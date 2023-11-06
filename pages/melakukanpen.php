@@ -109,7 +109,7 @@ input[type=number] {
                         $sql = "SELECT a.id_penilai, a.nip, c.nama_ppa, b.id_penilai_detail, b.status, b.pesan FROM penilai a JOIN penilai_detail b  ON a.id_penilai = b.id_penilai
                                 JOIN user c ON a.nip = c.nip WHERE b.nip = '$nip_s' ";
                                 /*AND b.id_penilai_detail NOT IN(SELECT id_penilai_detail FROM penilaian)*/
-                        //echo $sql;
+                        // echo $sql;
                         $q = mysql_query($sql);
                         //if(mysql_num_rows($q)>0)
                         while($row = mysql_fetch_array($q)){
@@ -141,7 +141,7 @@ input[type=number] {
         <?php
             $status = '';
             if(isset($_GET["idpenilai"])) {
-                $ssql = "SELECT c.nama_ppa, c.nip, c.golongan, c.jabatan, c.unit_organisasi, d.jabatan, d.level, ROUND(AVG(a.hasil_nilai),2) as rata2, b.status, b.id_penilai, b.id_penilai_detail, d.id_jenis_user FROM penilaian a JOIN penilai_detail b ON b.id_penilai_detail = a.id_penilai_detail JOIN user c ON c.nip = b.nip JOIN jenis_user d ON d.id_jenis_user = c.id_jenis_user JOIN penilai e ON e.id_penilai = b.id_penilai WHERE b.id_penilai_detail = '". $_GET["idpenilai"]."' GROUP BY a.id_penilai_detail";
+                $ssql = "SELECT c.nama_ppa, c.nip, c.golongan, c.jabatan, c.unit_organisasi, d.jabatan, d.level, ROUND(AVG(a.hasil_nilai),2) as rata2, b.status, b.pesan, b.id_penilai, b.id_penilai_detail, d.id_jenis_user FROM penilaian a JOIN penilai_detail b ON b.id_penilai_detail = a.id_penilai_detail JOIN user c ON c.nip = b.nip JOIN jenis_user d ON d.id_jenis_user = c.id_jenis_user JOIN penilai e ON e.id_penilai = b.id_penilai WHERE b.id_penilai_detail = '". $_GET["idpenilai"]."' GROUP BY a.id_penilai_detail";
                 $q = mysql_query($ssql);
                 $rw = mysql_fetch_array($q);
                 $status = $rw["status"];
@@ -155,9 +155,12 @@ input[type=number] {
             }
            
             $id_penilai = isset($_GET['id'])?mysql_real_escape_string(htmlspecialchars($_GET['id'])):"";
-            $sql = "SELECT a.id_penilai, a.nip, b.id_jenis_user, b.nama_ppa, b.golongan, b.unit_organisasi, b.jabatan FROM penilai a JOIN user b ON a.nip = b.nip JOIN jenis_user c ON b.id_jenis_user = c.id_jenis_user WHERE a.id_penilai = '$id_penilai'";
+            $sql = "SELECT a.id_penilai, a.nip, b.id_jenis_user, b.nama_ppa, b.golongan, b.unit_organisasi, b.jabatan, d.pesan FROM penilai a JOIN user b ON a.nip = b.nip JOIN jenis_user c ON b.id_jenis_user = c.id_jenis_user JOIN penilai_detail d ON d.id_penilai = a.id_penilai AND d.nip = '$nip_s' WHERE a.id_penilai = '$id_penilai'";
+            // echo $sql;
             $q = mysql_query($sql);
             $row  = mysql_fetch_array($q);
+            $pesan = $row["pesan"];
+            $nama = $row['nama_ppa'];
         ?>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="row">
@@ -445,6 +448,9 @@ input[type=number] {
                             <button type="submit" class="btn btn-danger btn-md">Ajukan Keberatan</button>
                         </form>
                     <?php } else { ?>
+                        <?php if($pesan !== null) { ?>
+                            <span class="alert alert-danger"><b>Pesan keberatan dari <?php echo $nama; ?>:</b> <?php echo $pesan ?></span>
+                        <?php } ?>
                     <div class="float-right">
                         <br>
                         <button type="submit" class="btn btn-primary btn-md">Simpan</button>
