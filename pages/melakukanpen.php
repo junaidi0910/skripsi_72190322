@@ -141,17 +141,17 @@ input[type=number] {
         <?php
             $status = '';
             if(isset($_GET["idpenilai"])) {
-                $ssql = "SELECT c.nama_ppa, c.nip, c.golongan, c.jabatan, c.unit_organisasi, d.jabatan as level, ROUND(AVG(a.hasil_nilai),2) as rata2, b.status, b.id_penilai, b.id_penilai_detail, d.id_jenis_user FROM penilaian a JOIN penilai_detail b ON b.id_penilai_detail = a.id_penilai_detail JOIN user c ON c.nip = b.nip JOIN jenis_user d ON d.id_jenis_user = c.id_jenis_user JOIN penilai e ON e.id_penilai = b.id_penilai WHERE b.id_penilai_detail = '". $_GET["idpenilai"]."' GROUP BY a.id_penilai_detail";
+                $ssql = "SELECT c.nama_ppa, c.nip, c.golongan, c.jabatan, c.unit_organisasi, d.jabatan, d.level, ROUND(AVG(a.hasil_nilai),2) as rata2, b.status, b.id_penilai, b.id_penilai_detail, d.id_jenis_user FROM penilaian a JOIN penilai_detail b ON b.id_penilai_detail = a.id_penilai_detail JOIN user c ON c.nip = b.nip JOIN jenis_user d ON d.id_jenis_user = c.id_jenis_user JOIN penilai e ON e.id_penilai = b.id_penilai WHERE b.id_penilai_detail = '". $_GET["idpenilai"]."' GROUP BY a.id_penilai_detail";
                 $q = mysql_query($ssql);
                 $rw = mysql_fetch_array($q);
                 $status = $rw["status"];
-                $sebagai = $rw['level']==3?'0':($rw['level']==1?'1':($_GET["idpenilai"]==$rw['nip']?'2':''));
+                $sebagai = $rw['level']==3||$rw['level']==2?'0':($rw['level']==1?'1':($_GET["idpenilai"]==$rw['nip']?'2':''));
             } else {
                 $nip_s = $_SESSION[md5('user')];
                 $ssql = "SELECT * FROM user c JOIN jenis_user d ON c.id_jenis_user = d.id_jenis_user WHERE c.nip = '$nip_s'";
                 $q = mysql_query($ssql);
                 $rw = mysql_fetch_array($q);
-                $sebagai = $rw['level']==3?'0':($rw['level']==1?'1':($nip_s==$rw['nip']?'2':''));
+                $sebagai = $rw['level']==3||$rw['level']==2?'0':($rw['level']==1?'1':($nip_s==$rw['nip']?'2':''));
             }
            
             $id_penilai = isset($_GET['id'])?mysql_real_escape_string(htmlspecialchars($_GET['id'])):"";
@@ -240,7 +240,7 @@ input[type=number] {
                             if($row["id_jenis_user"] == $rw["id_jenis_user"]) {
                                 $sql = "SELECT * FROM kelompok_penilaian WHERE nama_kelpenilaian = 'Rekan Kerja'";
                             } else {
-                                $sql = "SELECT * FROM kelompok_penilaian";
+                                $sql = "SELECT * FROM kelompok_penilaian WHERE nama_kelpenilaian != 'Rekan Kerja'";
                             }
                             $q = mysql_query($sql);
                             $i = 0;
@@ -290,12 +290,13 @@ input[type=number] {
                                     <tbody>
                                         <?php
                                             $i=0;
+                                            $tot = 0;
                                             if(isset($_GET["idpenilai"])) {
-                                                $sq = "SELECT * FROM isi_penilaian a JOIN penilaian b ON b.id_isi = a.id_isi WHERE a.id_kelpenilaian = $v[id_kelpenilaian] AND a.ket LIKE '%$sebagai%' ";
+                                                $sq = "SELECT * FROM isi_penilaian a JOIN penilaian b ON b.id_isi = a.id_isi WHERE a.id_kelpenilaian = $v[id_kelpenilaian] AND b.id_penilai_detail = '". $_GET["idpenilai"] . "' AND a.ket LIKE '%$sebagai%' ";
                                             } else {
                                                 $sq = "SELECT * FROM isi_penilaian WHERE id_kelpenilaian = $v[id_kelpenilaian] AND ket LIKE '%$sebagai%' ";
                                             }
-                                            $tot = 0;
+                                            // echo $sq;
                                             $qs = mysql_query($sq);
                                             $banyak = mysqli_num_rows($qs);
                                             while($row = mysql_fetch_array($qs)){
@@ -303,7 +304,8 @@ input[type=number] {
                                         <tr>
                                             <td ><?= ++$i; ?></td>
                                             <td ><?= $row['isi_penilaian']; ?></td>
-                                            <?php if(isset($_GET["idpenilai"])) { 
+                                            <?php
+                                            if(isset($_GET["idpenilai"])) { 
                                                 if($row['hasil_nilai'] >= 91 && $row['hasil_nilai'] <= 100) {
                                                     $sebutan = 'Amat Baik';
                                                 } else if ($row['hasil_nilai'] >= 76 && $row['hasil_nilai'] <= 90) {
@@ -339,7 +341,11 @@ input[type=number] {
                                                 </td> -->
                                                 </tr>
                                                 <?php } 
-                                                $rata2 = $tot/$i;
+                                                if($tot > 0) {
+                                                    $rata2 = $tot/$i;
+                                                } else {
+                                                    $rata2 = 0;
+                                                }
                                                 ?>
                                     </tbody>
                                     </table>
@@ -429,7 +435,7 @@ input[type=number] {
                 </div>
                 <div class="container">
                     <br>
-                    <?php if($status == 0) { ?>
+                    <?php if($status == '0') { ?>
                     </form>
                         <form class="form-horizontal" method="post" action="modal/p_nilai.php">
                             <input type="hidden" name="nip_penilai" value="<?= $rw['id_penilai_detail']; ?>" >
