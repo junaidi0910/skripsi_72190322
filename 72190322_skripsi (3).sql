@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 05, 2023 at 08:50 AM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.0.28
+-- Generation Time: Nov 08, 2023 at 10:51 AM
+-- Server version: 10.1.28-MariaDB
+-- PHP Version: 7.1.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -30,9 +31,9 @@ SET time_zone = "+00:00";
 CREATE TABLE `isi_penilaian` (
   `id_isi` int(11) NOT NULL,
   `id_kelpenilaian` int(11) DEFAULT NULL,
-  `isi_penilaian` text DEFAULT NULL,
+  `isi_penilaian` text,
   `ket` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `isi_penilaian`
@@ -51,7 +52,8 @@ INSERT INTO `isi_penilaian` (`id_isi`, `id_kelpenilaian`, `isi_penilaian`, `ket`
 (12, 12, 'nilai 2', '1'),
 (13, 12, 'nilai 3', '1'),
 (14, 12, 'nilai 4', '1'),
-(15, 10, 'test', '0,1');
+(15, 10, 'test', '0,1'),
+(16, 12, 'cepat tanggap ', '0,1');
 
 -- --------------------------------------------------------
 
@@ -63,7 +65,7 @@ CREATE TABLE `jenis_user` (
   `id_jenis_user` int(10) NOT NULL,
   `jabatan` varchar(40) DEFAULT NULL,
   `level` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `jenis_user`
@@ -83,18 +85,17 @@ INSERT INTO `jenis_user` (`id_jenis_user`, `jabatan`, `level`) VALUES
 
 CREATE TABLE `kelompok_penilaian` (
   `id_kelpenilaian` int(11) NOT NULL,
-  `nama_kelpenilaian` varchar(50) DEFAULT '0',
-  `bobot_kelpenilaian` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `nama_kelpenilaian` varchar(50) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `kelompok_penilaian`
 --
 
-INSERT INTO `kelompok_penilaian` (`id_kelpenilaian`, `nama_kelpenilaian`, `bobot_kelpenilaian`) VALUES
-(9, 'Kedisplinan', ''),
-(10, 'Kapabilitas', ''),
-(12, 'Rekan Kerja', '');
+INSERT INTO `kelompok_penilaian` (`id_kelpenilaian`, `nama_kelpenilaian`) VALUES
+(9, 'Kedisplinan'),
+(10, 'Kapabilitas'),
+(12, 'Rekan Kerja');
 
 -- --------------------------------------------------------
 
@@ -106,15 +107,15 @@ CREATE TABLE `penilai` (
   `id_penilai` int(11) NOT NULL,
   `nip` char(18) DEFAULT NULL,
   `id_periode` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `penilai`
 --
 
 INSERT INTO `penilai` (`id_penilai`, `nip`, `id_periode`) VALUES
-(2, '2012091200113511', 4),
-(17, '72190377', 4);
+(22, '2012091200113511', 4),
+(23, '72190322', 4);
 
 -- --------------------------------------------------------
 
@@ -127,17 +128,31 @@ CREATE TABLE `penilaian` (
   `id_penilai_detail` int(11) DEFAULT NULL,
   `id_isi` int(11) DEFAULT NULL,
   `hasil_nilai` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `penilaian`
 --
 
 INSERT INTO `penilaian` (`id_nilai`, `id_penilai_detail`, `id_isi`, `hasil_nilai`) VALUES
-(100, 54, 11, 12),
-(101, 54, 12, 12),
-(102, 54, 13, 12),
-(103, 54, 14, 12);
+(203, 82, 3, 90),
+(204, 82, 4, 90),
+(205, 82, 5, 90),
+(206, 82, 6, 90),
+(207, 82, 7, 90),
+(208, 82, 8, 90),
+(209, 82, 9, 90),
+(210, 82, 10, 90),
+(211, 82, 15, 90),
+(221, 87, 3, 90),
+(222, 87, 4, 90),
+(223, 87, 5, 90),
+(224, 87, 6, 90),
+(225, 87, 7, 90),
+(226, 87, 8, 90),
+(227, 87, 9, 90),
+(228, 87, 10, 90),
+(229, 87, 15, 90);
 
 -- --------------------------------------------------------
 
@@ -151,24 +166,23 @@ CREATE TABLE `penilai_detail` (
   `nip` char(16) NOT NULL,
   `status` int(1) DEFAULT NULL,
   `pesan` varchar(500) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `penilai_detail`
 --
 
 INSERT INTO `penilai_detail` (`id_penilai_detail`, `id_penilai`, `nip`, `status`, `pesan`) VALUES
-(11, 2, '2012091200113501', NULL, NULL),
-(47, 2, '2012091200113501', NULL, NULL),
-(48, 2, '72190456', NULL, NULL),
-(49, 2, '72190322', NULL, NULL),
-(50, 2, '72190678', NULL, NULL),
-(51, 2, '72190377', NULL, NULL),
-(52, 17, '2012091200113501', NULL, NULL),
-(53, 17, '2012091200113511', NULL, NULL),
-(54, 17, '72190322', 1, 'test'),
-(55, 17, '72190456', NULL, NULL),
-(56, 17, '72190678', NULL, NULL);
+(82, 22, '2012091200113501', 0, NULL),
+(83, 22, '72190322', NULL, NULL),
+(84, 22, '72190377', NULL, NULL),
+(85, 22, '72190456', NULL, NULL),
+(86, 22, '72190678', NULL, NULL),
+(87, 23, '2012091200113501', 0, NULL),
+(88, 23, '2012091200113511', NULL, NULL),
+(89, 23, '72190456', NULL, NULL),
+(90, 23, '72190377', NULL, NULL),
+(91, 23, '72190678', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -180,19 +194,15 @@ CREATE TABLE `periode` (
   `id_periode` int(11) NOT NULL,
   `tahun_ajar` varchar(50) NOT NULL,
   `semester` varchar(50) NOT NULL,
-  `status_periode` int(11) NOT NULL,
-  `setting` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+  `status_periode` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `periode`
 --
 
-INSERT INTO `periode` (`id_periode`, `tahun_ajar`, `semester`, `status_periode`, `setting`) VALUES
-(1, '2018', 'Ganjil', 0, ''),
-(2, '2018', 'Genap', 0, ''),
-(3, '2019', 'Ganjil', 0, ''),
-(4, '2023', 'Genap', 1, '');
+INSERT INTO `periode` (`id_periode`, `tahun_ajar`, `semester`, `status_periode`) VALUES
+(4, '2023', 'Genap', 1);
 
 -- --------------------------------------------------------
 
@@ -209,13 +219,13 @@ CREATE TABLE `user` (
   `jabatan` varchar(100) DEFAULT NULL,
   `unit_organisasi` varchar(100) DEFAULT NULL,
   `status_ppa` varchar(100) DEFAULT NULL,
-  `alamat` text DEFAULT NULL,
+  `alamat` text,
   `tempat_lahir` varchar(100) DEFAULT NULL,
   `tgl_lahir` date DEFAULT NULL,
   `jenis_kelamin` char(1) DEFAULT NULL,
   `status_nikah` char(1) DEFAULT NULL,
   `no_telp` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `user`
@@ -299,7 +309,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `isi_penilaian`
 --
 ALTER TABLE `isi_penilaian`
-  MODIFY `id_isi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_isi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `jenis_user`
@@ -317,19 +327,19 @@ ALTER TABLE `kelompok_penilaian`
 -- AUTO_INCREMENT for table `penilai`
 --
 ALTER TABLE `penilai`
-  MODIFY `id_penilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id_penilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `penilaian`
 --
 ALTER TABLE `penilaian`
-  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `id_nilai` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=230;
 
 --
 -- AUTO_INCREMENT for table `penilai_detail`
 --
 ALTER TABLE `penilai_detail`
-  MODIFY `id_penilai_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id_penilai_detail` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `periode`
