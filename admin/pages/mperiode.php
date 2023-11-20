@@ -193,12 +193,6 @@
 							$q = mysql_query($sql);
 							$i=0;
 							while($row = mysql_fetch_array($q)){
-								$setting = '';
-								if($row['setting']!=''){
-									$set = explode(';', $row['setting']);
-									$setting = "Atasan = $set[0]% <br>Rekan Kerja = $set[1]% <br>Diri Sendiri = $set[2]%";
-								}
-
 						?>
 						<tr>
 							<td><?= ++$i; ?></td>

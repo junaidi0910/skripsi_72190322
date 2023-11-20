@@ -10,10 +10,6 @@
 			$sql = "SELECT * FROM kelompok_penilaian";
 			$q = mysql_query($sql);
 			
-			while($row = mysql_fetch_array($q)){
-				${"b_".$row['nama_kelpenilaian']} = $row['bobot_kelpenilaian'];
-			}
-
 			$sql = "SELECT * FROM penilai a JOIN penilai_detail b ON a.id_penilai = b.id_penilai WHERE a.nip = '$nip_user' ";
 			$q = mysql_query($sql);
 			$id_penilai_detail = '';
@@ -71,46 +67,46 @@
 			$tot_kepribadian = 0;
 			$tot_sosial = 0;
 			$tot_profesional = 0;
-			while($row = mysql_fetch_array($q)){
-				$tot = 0;
-				$pg = ($row['Pedagogik']/10)*100;
-				$kp = ($row['Kepribadian']/5)*100;
-				$ss = ($row['Sosial']/4)*100;
-				$pr = ($row['Profesional']/5)*100;
+			// while($row = mysql_fetch_array($q)){
+			// 	$tot = 0;
+			// 	$pg = ($row['Pedagogik']/10)*100;
+			// 	$kp = ($row['Kepribadian']/5)*100;
+			// 	$ss = ($row['Sosial']/4)*100;
+			// 	$pr = ($row['Profesional']/5)*100;
 
 
-				$tot_pedagodik += $pg;
-				$tot_kepribadian += $kp;
-				$tot_sosial += $ss;
-				$tot_profesional += $pr;
-				/* prestasi kinerja individu */
-				$tot = ($pg*($tot_pedagodik/100)) + ($kp*($tot_kepribadian/100)) + ($ss*($tot_sosial/100)) + ($pr*($tot_profesional/100));
+			// 	$tot_pedagodik += $pg;
+			// 	$tot_kepribadian += $kp;
+			// 	$tot_sosial += $ss;
+			// 	$tot_profesional += $pr;
+			// 	/* prestasi kinerja individu */
+			// 	$tot = ($pg*($tot_pedagodik/100)) + ($kp*($tot_kepribadian/100)) + ($ss*($tot_sosial/100)) + ($pr*($tot_profesional/100));
 
-				if($row['level']==2 || $row['level']==3){
-					$tot_arr['atasan'] += $tot;
-				}else if($row['level']==1 && $row['nip_penilai']!= $nip_user){
-					$tot_arr['guru'] += $tot;
-				}else{
-					$tot_arr['sendiri'] += $tot;
-				}
-			}
+			// 	if($row['level']==2 || $row['level']==3){
+			// 		$tot_arr['atasan'] += $tot;
+			// 	}else if($row['level']==1 && $row['nip_penilai']!= $nip_user){
+			// 		$tot_arr['guru'] += $tot;
+			// 	}else{
+			// 		$tot_arr['sendiri'] += $tot;
+			// 	}
+			// }
 	
 			$sql = "SELECT * FROM periode WHERE id_periode = $id_periode";
 			$q = mysql_query($sql);
 			$row = mysql_fetch_array($q);
-			if($row['setting']!=''){
-				$set = explode(";", $row['setting']);
+			// if($row['setting']!=''){
+			// 	$set = explode(";", $row['setting']);
 				
-				$set[0] = $set[0]/100;
-				$set[1] = $set[1]/100;
-				$set[2] = $set[2]/100;
-			}else{
-				$set[0] = 0.5;
-				$set[1] = 0.3;
-				$set[2] = 0.2;
-			}
+			// 	$set[0] = $set[0]/100;
+			// 	$set[1] = $set[1]/100;
+			// 	$set[2] = $set[2]/100;
+			// }else{
+			// 	$set[0] = 0.5;
+			// 	$set[1] = 0.3;
+			// 	$set[2] = 0.2;
+			// }
 
-			$ak = ($tot_arr['atasan']*$set[0]) + ($tot_arr['guru']*$set[1]) + ($tot_arr['sendiri']*$set[2]);
+			// $ak = ($tot_arr['atasan']*$set[0]) + ($tot_arr['guru']*$set[1]) + ($tot_arr['sendiri']*$set[2]);
 			//$ak = ($tot_arr['atasan']*0.5) + ($tot_arr['guru']*0.3) + ($tot_arr['sendiri']*0.2);			
 		?>
 		<script>

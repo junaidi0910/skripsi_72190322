@@ -39,7 +39,7 @@
 			}
 		}
 		$insert = mysql_query($sql);
-		$sql = "UPDATE penilai_detail SET status = 0, pesan = NULL WHERE id_penilai_detail = $id_penilaian_detail";
+		$sql = "UPDATE penilai_detail SET status = 0 WHERE id_penilai_detail = $id_penilaian_detail";
 		$update = mysql_query($sql);
 		if($insert){
 			$_SESSION["flash"]["type"] = "success";
@@ -63,6 +63,8 @@
 		if(mysql_num_rows($q)>0){
 			if(isset($_POST['setuju'])){
 				$sql = "UPDATE penilai_detail SET status = 2 WHERE id_penilai_detail = '". $_POST["nip_penilai"] . "'";
+			} else if(isset($_POST['validasi'])){
+				$sql = "UPDATE penilai_detail SET status = 3 WHERE id_penilai_detail = '". $_POST["nip_penilai"] . "'";
 			} else {
 				$sql = "UPDATE penilai_detail SET status = 1, pesan =  '". $_POST["pesan"] . "'  WHERE id_penilai_detail = '". $_POST["nip_penilai"] . "'";
 			}
@@ -70,7 +72,13 @@
 			if($query){
 				$_SESSION["flash"]["type"] = "success";
 				$_SESSION["flash"]["head"] = "Sukses";
-				$_SESSION["flash"]["msg"] = "Berhasil mengajukan keberatan!";
+				if(isset($_POST['setuju'])){
+					$_SESSION["flash"]["msg"] = "Berhasil menyetujui penilaian!";
+				} else if(isset($_POST['validasi'])){
+					$_SESSION["flash"]["msg"] = "Berhasil melakukan validasi!";
+				} else {
+					$_SESSION["flash"]["msg"] = "Berhasil mengajukan keberatan!";
+				}
 			}else{
 				$_SESSION["flash"]["type"] = "danger";
 				$_SESSION["flash"]["head"] = "Terjadi Kesalahan";
@@ -78,5 +86,5 @@
 			}
 			header("location:../index.php?p=home");
 		}
-	}
+	} 
 ?>

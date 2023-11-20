@@ -5,275 +5,358 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-    <link rel="icon" href="<?= base_url('../assets/img/assets/img/LOGO UKDW WARNA PNG.png'); ?>">
+	<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"> -->
+    <link href="<?= base_url("../assets/css/bootstrap.min.css") ?>" rel="stylesheet">
 	<title>Laporan Penilaian Kinerja</title>
 	<style>
-		.header{
-			clear: both;
-			border-bottom: 2px solid black;
+		@page {
+			size: a4 potrait; 
+			font-size: 12px;
+		} 
+		table.main, table.main th, table.main td {
+			border: 1px solid black !important;
 		}
-		.img-header{
-			width:100px;
-			float: left;
+		table.inner, table.inner th, table.inner td {
+			border: 0px solid black !important;
 		}
-		.header > h1,.header > h2,.header > h3{
-			margin: 0;
-			text-align: center;
-		}
-		.header > h2,.header > h3{
-			font-weight: normal;
-		}
-		.header>hr{
-			margin: 0;	
-		}
-		.main{
-			padding-top: 50px;
+		th, td {
+			padding: 0 8px;
 		}
 
-		table{
-			width: 100%;
-		}
-		.footer{
-			padding-top: 50px;
-			text-align: right;
-		}
-		.txt_center{
-			text-align: center;
-			
-		}
-		.txt_right{
-		}
-		thead:before, thead:after { display: none; }
-		tbody:before, tbody:after { display: none; }
 	</style>
 </head>
 <body>
-	<div class="header">
-		<img class="img-header" src="file://<?= $_SERVER["DOCUMENT_ROOT"].'/bim/assets/img/LOGO UKDW WARNA PNG.png'; ?>" alt="Logo">
-		<h3>Laporan Penilaian Kinerja Periode <?= get_tahun_ajar(); ?></h3>
-		<h2>Unit Pengembangan Sumber Daya Manusia UKDW</h2>
-		<h3>Jl. Dr. Wahidin Sudirohusodo No.5-25, Yogyakarta</h3>
+	<div class="">
+		<table style="width: 100%;">
+			<tr>
+				<td style="width:10%">
+					<img class="img-header" src="<?= base_url("../assets/img/LOGO UKDW WARNA PNG.png") ?>" style="height: 50px;" alt="Logo">
+				</td>
+				<td style="width:70%">
+					<h4 style="margin-bottom: 0; font-weight: bold;">UNIVERSITAS KRISTEN DUTA WACANA</h4>
+					<p style="padding: 0; margin: 0;">Jl. Dr. Wahidin Sudirohusodo No.5-25, Yogyakarta</p>
+				</td>
+				<td style="width: 25%; font-weight: bold; font-size: 14px;">
+					( RAHASIA )
+				</td>
+			</tr>
+		</table>
 		<br>
-		<hr>
-	</div>
-
-	<div class="main">
-		<?php if(!isset($_GET['detail'])): ?>
-		<table class="table" border="1" cellspacing="0" cellpadding="5">
-			<thead>
-				<tr>
-					<th>No</th>
-					<th>NIP</th>
-					<th>Nama</th>
-					<th>Total Nilai</th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php
-					$id_periode = get_tahun_ajar_id();
-					$i=0;
-					$sql = "SELECT
-								d.nip,
-								d.nama_ppa,
-								SUM(a.hasil_nilai) as nilai,
-								COUNT(a.id_nilai) as jml
-							FROM penilaian a
-							JOIN penilai_detail b ON a.id_penilai_detail = b.id_penilai_detail
-							JOIN penilai c ON b.id_penilai = c.id_penilai
-							JOIN user d ON c.nip = d.nip
-							WHERE c.id_periode = $id_periode
-							GROUP BY d.nip
-							HAVING COUNT(a.id_nilai) = (
-															SELECT 
-															(
-																(SELECT COUNT(*) FROM penilai p
-																JOIN penilai_detail pd ON p.id_penilai = pd.id_penilai
-																WHERE p.nip = d.nip)
-																*
-																(SELECT COUNT(*) FROM isi_penilaian)
-															) as tot
-															FROM dual
-														)
-							ORDER BY nilai DESC";
-					$q = mysql_query($sql);
-					while($row = mysql_fetch_array($q)){
-				?>
-				<tr>
-					<td><?= ++$i; ?></td>
-					<td><?= $row['nip']; ?></td>
-					<td><?= $row['nama_ppa']; ?></td>
-					<td><?= number_format($row['nilai'], 2); ?></td>
-				</tr>
-				<?php } ?>
-			</tbody>
-		</table>
-		<?php 
-		else:
-			$nip_user = $_GET['detail'];
-			$id_penilai = isset($_GET['id'])?mysql_real_escape_string(htmlspecialchars($_GET['id'])):"";
-            $sql = "SELECT * FROM user a JOIN jenis_user b ON a.id_jenis_user = b.id_jenis_user WHERE a.nip = '$nip_user' ";
-            $q = mysql_query($sql);
-            $row  = mysql_fetch_array($q);
-		?>
-		<table class="table" cellspacing="0">
-            <tr>
-                <td width="10%"><strong>NIP</strong></td>
-                <td width="1%">:</td>
-                <td> <?= $row['nip']; ?></td>
-            </tr>
-            <tr>
-                <td><strong>Nama</strong></td>
-                <td>:</td>
-                <td> <?= $row['nama_ppa']; ?></td>
-            </tr>
-            <tr>
-                <td><strong>Jabatan</strong></td>
-                <td>:</td>
-                <td> <?= $row['jabatan']; ?></td>
-            </tr>
-        </table>
-		<h4>Detail Penilaian</h4>
+		<br>
 		<?php
-			$sql = "SELECT 
-							a.id_kelpenilaian,
-							a.nama_kelpenilaian,
-							a.bobot_kelpenilaian,
-							COUNT(b.id_isi) as jml
-						FROM kelompok_penilaian a
-						JOIN isi_penilaian b ON a.id_kelpenilaian = b.id_kelpenilaian
-						GROUP BY a.id_kelpenilaian";
-				$q = mysql_query($sql);
-				
-				$data_kompetensi = [];
+			$sql = "SELECT c.nama_ppa, c.nip, c.golongan, c.jabatan, c.unit_organisasi, d.jabatan as level, ROUND(AVG(a.hasil_nilai),2) as rata2, b.status, b.id_penilai, b.id_penilai_detail, b.pesan FROM penilaian a JOIN penilai_detail b ON b.id_penilai_detail = a.id_penilai_detail JOIN user c ON c.nip = b.nip JOIN jenis_user d ON d.id_jenis_user = c.id_jenis_user JOIN penilai e ON e.id_penilai = b.id_penilai WHERE b.id_penilai_detail = '". $_GET["nip_penilai"]."' AND e.nip = '". $_GET["nip_dinilai"]."' GROUP BY a.id_penilai_detail";
+			$q = mysql_query($sql);
+			$row = mysql_fetch_assoc($q);
 
-				while($row = mysql_fetch_array($q)){
-					${"b_".$row['nama_kelpenilaian']} = $row['bobot_kelpenilaian'];
-					${"jml_".$row['nama_kelpenilaian']} = $row['bobot_kelpenilaian'];
-					$data_kompetensi[] = $row;
-				}
+			// echo $sql;
+
+			// echo $row["id_penilai_detail"];
+
+			$sql2 = "SELECT * FROM user c JOIN jenis_user d ON c.id_jenis_user = d.id_jenis_user WHERE c.nip = '". $_GET["nip_dinilai"]."'";
+			$q2 = mysql_query($sql2);
+			$rw = mysql_fetch_array($q2);
+
+			$sebagai = $rw['level']==3||$rw['level']==2?'0':($rw['level']==1?'1':($row["nip"]==$rw['nip']?'2':''));
 		?>
-
-        <table class="table table-bordered" border="1" cellspacing="0" cellpadding="5">
-				<tr>
-					<th class="txt_center" width="1%" rowspan="2">No</th>
-					<th class="txt_center" width="15%" rowspan="2">NIP</th>
-					<th class="txt_center" width="20%" rowspan="2">Nama</th>
-					<th class="txt_center" width="16%" rowspan="2">Jabatan</th>
-					<th class="txt_center" colspan="4">Kompetensi</th>
-					<th class="txt_center" rowspan="2">Total</th>
-				</tr>
-				<tr>
+		<div class="row mt-5">
+			<div class="col">
+				<div class="text-center">
+					<h4 style="font-weight: bold;">
+						DAFTAR PENILAIAN PELAKSANAAN PEKERJAAN <br>
+						DP3 <br>
+						KARYAWAN / PEGAWAI TETAP <br>
+						JANGKA WAKTU PENILAIAN <br>
+						<br>
+						BULAN : <br>
+						S.D.
+					</h4>
+				</div>
+			</div>
+		</div>
+		<div class="row mt-5">
+			<div class="col">
+				<table style="table-layout: fixed; width: 100%;" class="main">
+					<colgroup>
+					<col style="width: 2.5%; text-align: center;">
+					<col style="width: 15%">
+					<col style="width: 25%">
+					<col style="width: 15%">
+					<col style="width: 15%">
+					<col style="width: 27.5%">
+					</colgroup>
+					<tbody>
+					<tr>
+						<td rowspan="6" style="width: 7.5%; text-align: center;">1.</td>
+						<td colspan="5" style="font-weight: bold;">YANG DINILAI</td>
+					</tr>
+					<tr>
+						<td colspan="2">a. Nama</td>
+						<td colspan="3"><?= $rw["nama_ppa"]; ?></td>
+					</tr>
+					<tr>
+						<td colspan="2">b. N I K</td>
+						<td colspan="3"><?= $rw["nip"]; ?></td>
+					</tr>
+					<tr>
+						<td colspan="2">c. Pangkat, Golongan / ruang</td>
+						<td colspan="3"><?= $rw["golongan"]; ?></td>
+					</tr>
+					<tr>
+						<td colspan="2">d. Jabatan / pekerjaan</td>
+						<td colspan="3"><?= $rw["jabatan"]; ?></td>
+					</tr>
+					<tr>
+						<td colspan="2">e. Unit Organisasi</td>
+						<td colspan="3"><?= $rw["unit_organisasi"]; ?></td>
+					</tr>
+					<tr>
+						<td rowspan="6" style="width: 7.5%; text-align: center;">2.</td>
+						<td colspan="5" style="font-weight: bold;">PEJABAT PENILAI</td>
+					</tr>
+					<tr>
+						<td colspan="2">a. Nama</td>
+						<td colspan="3"><?= $row["nama_ppa"]; ?></td>
+					</tr>
+					<tr>
+						<td colspan="2">b. N I K</td>
+						<td colspan="3"><?= $row["nip"]; ?></td>
+					</tr>
+					<tr>
+						<td colspan="2">c. Pangkat, Golongan / ruang</td>
+						<td colspan="3"><?= $row["golongan"]; ?></td>
+					</tr>
+					<tr>
+						<td colspan="2">d. Jabatan / pekerjaan</td>
+						<td colspan="3"><?= $row["jabatan"]; ?></td>
+					</tr>
+					<tr>
+						<td colspan="2">e. Unit Organisasi</td>
+						<td colspan="3"><?= $row["unit_organisasi"]; ?></td>
+					</tr>
+					<tr>
+						<td rowspan="6" style="width: 7.5%; text-align: center;">3.</td>
+						<td colspan="5" style="font-weight: bold;">ATASAN PEJABAT PENILAI</td>
+					</tr>
+					<tr>
+						<td colspan="2">a. Nama</td>
+						<td colspan="3"></td>
+					</tr>
+					<tr>
+						<td colspan="2">b. N I K</td>
+						<td colspan="3"></td>
+					</tr>
+					<tr>
+						<td colspan="2">c. Pangkat, Golongan / ruang</td>
+						<td colspan="3"></td>
+					</tr>
+					<tr>
+						<td colspan="2">d. Jabatan / pekerjaan</td>
+						<td colspan="3"></td>
+					</tr>
+					<tr>
+						<td colspan="2">e. Unit Organisasi</td>
+						<td colspan="3"></td>
+					</tr>
+					<tr>
+						<td id="no4" style="width: 7.5%; text-align: center;">4.</td>
+						<td colspan="5" style="font-weight: bold;">PENILAI</td>
+					</tr>
+					<tr>
+						<td colspan="2" rowspan="2">UNSUR YANG DINILAI</td>
+						<td colspan="2" style="text-align: center;">NILAI</td>
+						<td id="keterangan" style="width: 22.5%">KETERANGAN
+						<p>Nilai rata-rata adalah jumlah dibagi dengan jumlah unsur yang dinilai.</p>
+						<br>
+							<p style="padding: 0; margin: 0;">NILAI SEBUTAN</p>
+							<p style="padding: 0; margin: 0;">91 - 100 : Amat Baik</p>
+							<p style="padding: 0; margin: 0;">76 - 90 : Baik</p>
+							<p style="padding: 0; margin: 0;">61 - 75 : Cukup Baik</p>
+							<p style="padding: 0; margin: 0;">51 - 60 : Sedang</p>
+							<p style="padding: 0; margin: 0;">< 50 : Kurang</p>
+						</td>
+					</tr>
+					<tr>
+						<td>ANGKA</td>
+						<td>SEBUTAN</td>
+					</tr>
 					<?php
-						foreach ($data_kompetensi as $key => $value) {
-							echo "<th class='txt_center'>$value[nama_kelpenilaian]</th>";
-						}
-					?>
-				</tr>
-			<?php
+						$sql3 = "SELECT * FROM penilai a JOIN penilai_detail b  ON a.id_penilai = b.id_penilai WHERE a.nip = '".$rw["nip"]."' AND b.nip = '".$row["nip"]."' ";
+						$q3 = mysql_query($sql3);
+						$row3 = mysql_fetch_array($q3);
+						// echo $sql3;
 
-				
-
-				$sql = "SELECT * FROM penilai a JOIN penilai_detail b ON a.id_penilai = b.id_penilai WHERE a.nip = '$nip_user' ";
-				$q = mysql_query($sql);
-				$id_penilai_detail = '0';
-				$i=0;
-				while($row = mysql_fetch_array($q)){
-					if($i==0){
-						$id_penilai_detail = $row['id_penilai_detail'];
-					}else{
-						$id_penilai_detail .= ", ".$row['id_penilai_detail'];
-					}
-					$i++;
-				}
-				$id_periode = get_tahun_ajar_id();
-				$komp = '';
-				foreach ($data_kompetensi as $key => $value) {
-					$komp .= "SUM( IF(tbnilai.nama_kelpenilaian = '$value[nama_kelpenilaian]', tbnilai.nilai, 0) ) AS '$value[nama_kelpenilaian]', ";
-				} 
-
-				$sql = "SELECT 
-							tbnilai.nip_penilai,
-							tbnilai.penilai,
-							tbnilai.level,
-							tbnilai.jabatan,
-							$komp
-							1
-						FROM 
-						(SELECT 
-							a.id_nilai, 
-							h.nip as nip_dinilai,
-							h.nama_ppa as 'dinilai',
-							e.nip as nip_penilai, 
-							e.nama_ppa as 'penilai',
-							f.jabatan,
-							f.level,
-							c.id_kelpenilaian,
-							c.nama_kelpenilaian,
-							c.bobot_kelpenilaian,
-							SUM(a.hasil_nilai) as nilai
-						FROM penilaian a 
-						JOIN isi_penilaian b ON a.id_isi = b.id_isi
-						JOIN kelompok_penilaian c ON b.id_kelpenilaian = c.id_kelpenilaian
-						JOIN (penilai_detail d JOIN user e ON d.nip = e.nip JOIN jenis_user f ON f.id_jenis_user = e.id_jenis_user) ON d.id_penilai_detail = a.id_penilai_detail 
-						JOIN (penilai g JOIN user h ON g.nip = h.nip ) ON d.id_penilai = g.id_penilai
-						WHERE a.id_penilai_detail IN ($id_penilai_detail) AND g.id_periode = $id_periode
-						GROUP BY a.id_penilai_detail, c.id_kelpenilaian
-						ORDER BY 4) as tbnilai
-						GROUP BY tbnilai.penilai";
-				//echo $sql;
-				$q = mysql_query($sql);
-				$nno = 0;
-				echo "<br>";
-				$tot_arr['atasan'] = 0;
-				$tot_arr['guru'] = 0;
-				$tot_arr['sendiri'] = 0;
-				while($row = mysql_fetch_array($q)){						
-					echo "<tr>";
-					echo "<td>".++$nno."</td>";
-					echo "<td>$row[nip_penilai]</td>";
-					echo "<td>$row[penilai]</td>";
-					echo "<td>$row[jabatan]</td>";
-
-					$tot = 0;
-					foreach ($data_kompetensi as $key => $value) {
-						$nil = ($row[$value['nama_kelpenilaian']]/$value['jml'])*100; 
-						echo "<td class='txt_right'>".number_format($nil,2)."</td>";
-						$tot += $nil * ($value['bobot_kelpenilaian']/100);
-					}
-
-					if($row['level']==2 || $row['level']==3){
-						$tot_arr['atasan'] += $tot;
-					}else if($row['level']==1 && $row['nip_penilai']!= $nip_user){
-						$tot_arr['guru'] += $tot;
-					}else{
-						$tot_arr['sendiri'] += $tot;
-					}
-
-					echo "<td class='txt_right'>".number_format($tot, 2)."</td>";
-					echo "</tr>";
-				}
-			?>
-				<tr>
-					<th colspan="8">Total Nilai Kinerja</th>
-					<th class="txt_right">
-					<?php
+						// echo $sql3;
 						
-						$ak = ($tot_arr['atasan']*0.5) + ($tot_arr['guru']*0.3) + ($tot_arr['sendiri']*0.2);
-						echo $ak;	
-							
+						$id_penilaian_detail = $row3['id_penilai_detail'];
+						$sql4 = "SELECT * FROM penilaian WHERE id_penilai_detail = $id_penilaian_detail";
+						$q4 = mysql_query($sql4);
+						
+						// echo $sql4;
+						$sqlz = "SELECT * FROM kelompok_penilaian WHERE nama_kelpenilaian != 'Rekan Kerja'";
+					$qz = mysql_query($sqlz);
+					$i = 0;
+					$data_kompetensi = [];
+					$no4 = 0;
+					while($rowz = mysql_fetch_array($qz)){
+						$data_kompetensi[$i]['id_kelpenilaian'] = $rowz['id_kelpenilaian'];
+						$data_kompetensi[$i]['nama_kelpenilaian'] = $rowz['nama_kelpenilaian'];
+						$i++;	
+					}
+				?>
+				<!-- <?php print_r($data_kompetensi); ?> -->
+						<?php
+							$tot = 0;
+					foreach ($data_kompetensi as $k => $v) {
 					?>
-					</th>
-				</tr>
-			
-		</table>
-		<?php endif; ?>
-	</div>
-	<div class="footer">
-		<?php
-			$array_bulan = array(1=>"Januari","Februari","Maret", "April", "Mei", "Juni","Juli","Agustus","September","Oktober", "November","Desember");
-			$tgl = date("d")." ".$array_bulan[date("n")]." ".date("Y");
-		?>
-		<p>Yogyakarta, <?= $tgl; ?></p>
+						<?php
+							$sql5 = "SELECT * FROM isi_penilaian a JOIN penilaian b ON b.id_isi = a.id_isi WHERE a.id_kelpenilaian = $v[id_kelpenilaian] AND b.id_penilai_detail = '$id_penilaian_detail'";
+							// echo $sq;
+							$q5 = mysql_query($sql5);
+							$banyak = mysqli_num_rows($q5);
+							$j = 0;
+							$no4 += $banyak;
+							while($row5 = mysql_fetch_array($q5)){
+
+								if($row5['hasil_nilai'] >= 91 && $row5['hasil_nilai'] <= 100) {
+									$sebutan = 'Amat Baik';
+								} else if ($row5['hasil_nilai'] >= 76 && $row5['hasil_nilai'] <= 90) {
+									$sebutan = 'Baik';
+								} else if ($row5['hasil_nilai'] >= 61 && $row5['hasil_nilai'] <= 75) {
+								$sebutan = 'Cukup Baik';
+							} else if ($row5['hasil_nilai'] >= 51 && $row5['hasil_nilai'] <= 60) {
+								$sebutan = 'Sedang';
+							} else if ($row5['hasil_nilai'] <= 50) {
+								$sebutan = 'Kurang';
+							} else {
+								$sebutan = '';
+							}    
+							$tot += $row5['hasil_nilai'];
+						?>
+						<tr>
+						<?php if($j == 0) { ?>
+						<td rowspan="<?= $banyak; ?>" style="width: 15%; font-weight: bold;"><?= $v['nama_kelpenilaian']; ?></td>
+						<?php } ?>
+						<td style="width: 25%"><?= $row5['isi_penilaian']; ?></td>
+						<td style="width: 15%"><?= $row5['hasil_nilai']; ?></td>
+						<td style="width: 15%"><?= $sebutan; ?></td>
+					</tr>
+					<?php $j++; 
+					if($j == $banyak) {
+						$j = 0;
+					}
+					} ?>
+					<?php
+					}
+
+					if($tot > 0) {
+						$rata2 = $tot/$no4;
+					} else {
+						$rata2 = 0;
+					}
+
+					if($rata2 >= 91 && $rata2 <= 100) {
+						$sebutan = 'Amat Baik';
+					} else if ($rata2 >= 76 && $rata2 <= 90) {
+						$sebutan = 'Baik';
+					} else if ($rata2 >= 61 && $rata2 <= 75) {
+						$sebutan = 'Cukup Baik';
+					} else if ($rata2 >= 51 && $rata2 <= 60) {
+						$sebutan = 'Sedang';
+					} else if ($rata2 <= 50) {
+						$sebutan = 'Kurang';
+					}  
+					?>
+					
+					<tr>
+						<td colspan="2">JUMLAH</td>
+						<td><?= $tot; ?></td>
+						<td></td>
+					</tr>
+					<tr>
+						<td colspan="2">NILAI RATA-RATA</td>
+						<td><?= number_format((float)$rata2, 2, ',', ''); ?></td>
+						<td><?= $sebutan; ?></td>
+					</tr>
+					<tr>
+						<td style="width: 7.5%; text-align: center;">5.</td>
+						<td colspan="5">KEBERATAN DARI KARYAWAN / PEGAWAI YANG DINILAI (JIKA ADA)
+							<table style="width: 100%;" class="inner">
+								<tr>
+									<td style="width: 50%;"><p style="text-align: center"><?= $row["pesan"]; ?></p></td>
+									<td style="width: 50%;">
+										YOGYAKARTA, <?php echo date('d-m-Y'); ?>
+										<br>
+										<br>
+										<br>
+										(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td style="width: 7.5%; text-align: center;">6.</td>
+						<td colspan="5">TANGGAPAN PEJABAT PENILAI ATAS KEBERATAN
+							<table style="width: 100%;" class="inner">
+								<tr>
+									<td style="width: 50%;"><p style="text-align: center"></p></td>
+									<td style="width: 50%;">
+										YOGYAKARTA, <?php echo date('d-m-Y'); ?>
+										<br>
+										<br>
+										<br>
+										(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td style="width: 7.5%; text-align: center;">7.</td>
+						<td colspan="5">KEPUTUSAN ATASAN PENILAI PEJABAT ATAS KEBERATAN
+							<table style="width: 100%;" class="inner">
+								<tr>
+									<td style="width: 50%;"><p style="text-align: center">Valid</p></td>
+									<td style="width: 50%;">
+										YOGYAKARTA, <?php echo date('d-m-Y'); ?>
+										<br>
+										<br>
+										<br>
+										(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td style="width: 7.5%; text-align: center;">8.</td>
+						<td colspan="5">
+							<table style="width: 100%;" class="inner">
+								<tr>
+									<td style="width: 50%;"><p style="text-align: center"></p></td>
+									<td style="width: 50%;">
+										DIBUAT TANGGAL <?php echo date('d-m-Y'); ?> <br>
+										<?= $row["jabatan"]; ?>
+										<br>
+										<br>
+										<br>
+										NIP : <?= $row["nip"]; ?> <br>
+										(&nbsp; <?= $row["nama_ppa"]; ?> &nbsp;)
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td style="width: 7.5%; text-align: center;">9.</td>
+						<td colspan="2">DITERIMA TANGGAL <?php echo date('d-m-Y'); ?><br>KARYAWAN/PEGAWAI TETAP YANG DINILAI<br><br><br>(&nbsp; <?= $rw["nama_ppa"]; ?> &nbsp;)</td>
+						<td style="width: 7.5%; text-align: center;">10.</td>
+						<td colspan="2">DITERIMA TANGGAL <?php echo date('d-m-Y'); ?><br>ATASAN PEJABAT YANG MENILAI<br><br><br>(&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)</td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 	</div>
 </body>
 </html>

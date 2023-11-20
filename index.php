@@ -63,7 +63,7 @@
               <span class="sr-only">(current)</span>
               </a>
           </li>
-          <?php if($_SESSION[md5('level')] == 3 || $_SESSION[md5('level')] == 2 ): ?>
+          <?php if($_SESSION[md5('level')] == 2 ): ?>
           <li class="nav-item">
             <a class="nav-link" href="index.php?p=memilihpen">
               <i class="fa fa-hand-o-right"></i>
@@ -71,6 +71,7 @@
             </a>
           </li>
           <?php endif; ?>
+          <?php if($_SESSION[md5('level')] == 1 || $_SESSION[md5('level')] == 2 ): ?>
           <li class="nav-item">
             <a class="nav-link" href="index.php?p=melakukanpen">
               <i class="fa fa-check-square-o">
@@ -78,6 +79,22 @@
               Penilaian Kinerja
             </a>
           </li>
+          <?php endif; ?>
+          <?php if($_SESSION[md5('level')] == 3): ?>
+          <li class="nav-item">
+            <a class="nav-link" href="index.php?p=memilihpen">
+              <i class="fa fa-check-square-o"></i>
+              Validasi
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="index.php?p=x">
+              <i class="fa fa-dashboard"></i>
+              Data Dashboard
+            </a>
+          </li>
+          <?php endif; ?>
+          <?php if($_SESSION[md5('level')] == 3 || $_SESSION[md5('level')] == 1): ?>
           <li class="nav-item">
             <a class="nav-link" href="index.php?p=laporanpen">
               <i class="fa fa-file-text">
@@ -85,6 +102,7 @@
               Laporan Penilaian Kinerja
             </a>
           </li>
+          <?php endif; ?>
         </ul>
         <ul class="navbar-nav ">
           <li class="nav-item active dropdown">
@@ -273,7 +291,6 @@
                 $("[href='"+ar[0]+"']").addClass('active');
               }else{
                 $("[href='"+segments[4]+"']").addClass('active');
-                
               }
           }
 

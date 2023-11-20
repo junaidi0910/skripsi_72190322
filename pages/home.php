@@ -7,7 +7,9 @@
 	.img-logo{
 		width: 100px;
 	}
-
+	table, th, td {
+  border: 1px solid black !important;
+}
 </style>
 
 <div class="jumbotron" >
@@ -16,6 +18,55 @@
     	<h3>Penilaian Kinerja DP3 UKDW</h3>
   	</div>
 </div>
+<?php if($_SESSION[md5('level')] == 3) { ?>
+	<?php
+	$sql = "SELECT c.nama_ppa, c.nip as nip_penilai, e.nip as nip_dinilai, c.golongan, c.jabatan, c.unit_organisasi, d.jabatan as level, ROUND(AVG(a.hasil_nilai),2) as rata2, b.status, b.id_penilai, b.id_penilai_detail FROM penilaian a JOIN penilai_detail b ON b.id_penilai_detail = a.id_penilai_detail JOIN user c ON c.nip = b.nip JOIN jenis_user d ON d.id_jenis_user = c.id_jenis_user JOIN penilai e ON e.id_penilai = b.id_penilai WHERE b.status = 2  GROUP BY a.id_penilai_detail";
+	$q = mysql_query($sql);
+	$j = mysql_num_rows($q);
+	// echo $sql;
+    $i = 1;
+	if($j > 0) {
+		?>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>N</th>
+						<th>Dari</th>
+						<th>Yang Dinilai</th>
+						<th>Tanggal</th>
+						<th>Nilai Rata-rata</th>
+						<th>Aksi</th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php
+						while($row = mysql_fetch_array($q)){
+					?>
+					<tr>
+						<td><?= $i; ?></td>
+						<td><?= $row["nama_ppa"]; ?></td>
+						<?php
+						$sql2 = "SELECT * FROM user WHERE nip = '" . $row["nip_dinilai"] . "' LIMIT 1";
+						$q2 = mysql_query($sql2);
+						$rw = mysql_fetch_assoc($q2);
+						?>
+						<td><?= $rw["nama_ppa"]; ?></td>
+						<td><?= $row["jabatan"]; ?></td>
+						<td><?= $row["rata2"]; ?></td>
+						<td>
+						<form class="form-horizontal" method="post" action="modal/p_nilai.php">
+                            <input type="hidden" name="nip_penilai" value="<?= $row['id_penilai_detail']; ?>" >
+                            <input type="hidden" name="keberatan" value="<?= $_SESSION[md5('user')]; ?>" >
+                       
+              <button type="submit" name="validasi" class="btn btn-success">Validasi</button>
+			  </form>
+			</td>
+					</tr>
+					<?php $i++; } ?>
+				</tbody>
+			</table>
+<?php } ?>
+<?php } else { ?>
 <?php
 	$sql = "SELECT c.nama_ppa, c.nip, c.golongan, c.jabatan, c.unit_organisasi, d.jabatan as level, ROUND(AVG(a.hasil_nilai),2) as rata2, b.status, b.id_penilai, b.id_penilai_detail FROM penilaian a JOIN penilai_detail b ON b.id_penilai_detail = a.id_penilai_detail JOIN user c ON c.nip = b.nip JOIN jenis_user d ON d.id_jenis_user = c.id_jenis_user JOIN penilai e ON e.id_penilai = b.id_penilai WHERE e.nip = '". $_SESSION[md5('user')]."' GROUP BY a.id_penilai_detail";
 	$q = mysql_query($sql);
@@ -50,12 +101,15 @@
 						<td><?= $row["level"]; ?></td>
 						<td><?= $row["rata2"]; ?></td>
 						<?php if($row["status"] == 0) { ?>
-						<td><a class="btn btn-danger" href="index.php?p=melakukanpen&id=<?= $row['id_penilai']; ?>&idpenilai=<?= $row['id_penilai_detail']; ?>">Keberatan</a>
+						<td>
 						<form class="form-horizontal" method="post" action="modal/p_nilai.php">
                             <input type="hidden" name="nip_penilai" value="<?= $row['id_penilai_detail']; ?>" >
                             <input type="hidden" name="keberatan" value="<?= $_SESSION[md5('user')]; ?>" >
                        
-              <button type="submit" name="setuju" class="btn btn-success">Setuju</button> </form></td>
+              <button type="submit" name="setuju" class="btn btn-success">Setuju</button>
+			  <a class="btn btn-danger" href="index.php?p=melakukanpen&id=<?= $row['id_penilai']; ?>&idpenilai=<?= $row['id_penilai_detail']; ?>">Keberatan</a>
+			  </form>
+			</td>
 			  			<?php } else if($row["status"] == 1) { ?>
 							<td>Telah mengajukan keberatan</td>
 			  			<?php } else { ?>
@@ -65,6 +119,7 @@
 					<?php $i++; } ?>
 				</tbody>
 			</table>
+<?php } ?>
 <?php } ?>
 <?php
 
@@ -262,6 +317,9 @@ echo "</script>";
 	.jumbotron {
     background: rgba(204, 204, 204, 0.5);
 }
+table, th, td {
+  border: 1px solid black !important;
+}
 </style>
 <div class="jumbotron" >
   	<div class="container text-center">
@@ -271,6 +329,7 @@ echo "</script>";
 </div>
 <?php
 	$sql = "SELECT c.nama_ppa, c.nip, c.golongan, c.jabatan, c.unit_organisasi, d.jabatan as level, ROUND(AVG(a.hasil_nilai),2) as rata2, b.status, b.id_penilai, b.id_penilai_detail FROM penilaian a JOIN penilai_detail b ON b.id_penilai_detail = a.id_penilai_detail JOIN user c ON c.nip = b.nip JOIN jenis_user d ON d.id_jenis_user = c.id_jenis_user JOIN penilai e ON e.id_penilai = b.id_penilai WHERE e.nip = '". $_SESSION[md5('user')]."' GROUP BY a.id_penilai_detail";
+	// echo $sql;
 	$q = mysql_query($sql);
 	$j = mysql_num_rows($q);
     $i = 1;
@@ -302,14 +361,26 @@ echo "</script>";
 						<td><?= $row["level"]; ?></td>
 						<td><?= $row["rata2"]; ?></td>
 						<?php if($row["status"] == 0) { ?>
-						<td><a class="btn btn-danger" href="index.php?p=melakukanpen&id=<?= $row['id_penilai']; ?>&idpenilai=<?= $row['id_penilai_detail']; ?>">Keberatan</a>
+						<td>
 						<form class="form-horizontal" method="post" action="modal/p_nilai.php">
                             <input type="hidden" name="nip_penilai" value="<?= $row['id_penilai_detail']; ?>" >
                             <input type="hidden" name="keberatan" value="<?= $_SESSION[md5('user')]; ?>" >
                        
-              <button type="submit" name="setuju" class="btn btn-success">Setuju</button> </form></td>
+              <button type="submit" name="setuju" class="btn btn-success">Setuju</button> 
+			  <a class="btn btn-danger" href="index.php?p=melakukanpen&id=<?= $row['id_penilai']; ?>&idpenilai=<?= $row['id_penilai_detail']; ?>">Keberatan</a></form>
+			
+			</td>
 			  			<?php } else if($row["status"] == 1) { ?>
 							<td>Telah mengajukan keberatan</td>
+			  			<?php } else if($row["status"] == 3) { ?>
+							<td>
+						<form class="form-horizontal" method="post" action="pages/pdf.php">
+                            <input type="hidden" name="nip_penilai" value="<?= $row['id_penilai_detail']; ?>" >
+                            <input type="hidden" name="nip_dinilai" value="<?= $_SESSION[md5('user')]; ?>" >
+                       
+              <button type="submit" name="unduh" class="btn btn-success">Unduh</button></form>
+			
+			</td>
 			  			<?php } else { ?>
 							<td>Telah disetujui</td>
 						<?php } ?>
