@@ -113,12 +113,6 @@
 						$tahun_ajar = $row['tahun_ajar']; 
 						$semester = $row['semester']; 
 						$btn = "Ubah"; 
-						if($row['setting']!=''){
-							$set = explode(';', $row['setting']);
-							$atasan = $set[0];
-							$rekan = $set[1];
-							$diri = $set[2];
-						}
 					}
 
 			?>
